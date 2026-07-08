@@ -12,7 +12,7 @@ a{color:inherit}
 .logo{font-family:Georgia,serif;font-size:26px;font-weight:900;text-decoration:none;color:var(--rose)}
 nav{display:flex;gap:18px;flex-wrap:wrap}
 nav a{text-decoration:none;font-weight:800;font-size:14px}
-.hero{min-height:74vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:90px 24px;background:linear-gradient(rgba(48,20,36,.58),rgba(48,20,36,.62)),url("https://images.unsplash.com/photo-1520763185298-1b434c919102?q=80&w=2000&auto=format&fit=crop");background-size:cover;background-position:center;color:white}
+.hero{min-height:74vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:90px 24px;background:linear-gradient(rgba(48,20,36,.58),rgba(48,20,36,.62)),url("hero-background.jpg");background-size:cover;background-position:center;color:white}
 .hero-card{max-width:920px;background:rgba(70,24,48,.42);border:1px solid rgba(255,255,255,.28);border-radius:34px;padding:50px 34px;box-shadow:0 30px 90px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
 .eyebrow{text-transform:uppercase;letter-spacing:.16em;color:#86a878;font-weight:900;font-size:12px}
 .hero .eyebrow{color:#ffe1e4}
@@ -109,3 +109,5 @@ footer{text-align:center;padding:40px;color:#7b706c}
   color:#b85c68;
   font-size:26px;
 }
+
+.floating-whatsapp{position:fixed;right:22px;bottom:22px;width:64px;height:64px;border-radius:50%;background:#25D366;color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:9999}.floating-whatsapp:hover{transform:scale(1.08)}

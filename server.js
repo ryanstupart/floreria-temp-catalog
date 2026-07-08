@@ -129,7 +129,7 @@ async function sendInquiryEmail(inquiry) {
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const from = process.env.EMAIL_FROM || "Floreria Florentina <contact@floreriaflorentina.com>";
+  const from = process.env.EMAIL_FROM || "Floreria Florentina <floreriaflorentina4@gmail.com>";
   const adminTo = process.env.EMAIL_TO || "ryanstupart@gmail.com";
 
   const isProduct = inquiry.type === "product";

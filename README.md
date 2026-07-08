@@ -62,7 +62,7 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=Flowers1234
 ADMIN_TOKEN=change-this-to-a-long-random-value
 EMAIL_TO=ryanstupart@gmail.com
-EMAIL_FROM=Floreria Florentina <contact@floreriaflorentina.com>
+EMAIL_FROM=Floreria Florentina <floreriaflorentina4@gmail.com>
 RESEND_API_KEY=your_resend_api_key
 ```
 
