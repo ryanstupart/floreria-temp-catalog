@@ -93,3 +93,23 @@ Required Render variable:
 ```text
 PUBLIC_SITE_URL=https://floreriaflorentina.com
 ```
+
+
+## Admin Accounts
+
+Default admin:
+username: admin
+password: Flowers1234
+
+Yajaira admin:
+username: Yajaira123
+password: Flowers1234
+
+## Admin Updates
+
+- Admin page has been redesigned.
+- The signed-in user receives a bilingual welcome message.
+- Active statuses are New / Nuevo and In Progress / En progreso.
+- Completed inquiries disappear from the active inquiry list.
+- Admin users can delete inquiries.
+- Successful form submissions now show a bilingual popup confirmation.

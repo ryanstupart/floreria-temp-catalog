@@ -1,3 +1,30 @@
+
+function showSuccessPopup(type = "contact") {
+  const popup = document.getElementById("successPopup");
+  const title = document.getElementById("successTitle");
+  const message = document.getElementById("successMessage");
+
+  if (!popup || !title || !message) return;
+
+  if (type === "product") {
+    title.textContent = "Inquiry Sent Successfully / Solicitud enviada correctamente";
+    message.innerHTML = "Thank you for choosing Floreria Florentina. We received your product inquiry and will contact you soon.<br><br>Gracias por elegir Floreria Florentina. Hemos recibido su solicitud de producto y nos comunicaremos pronto.";
+  } else {
+    title.textContent = "Message Sent Successfully / Mensaje enviado correctamente";
+    message.innerHTML = "Thank you for contacting Floreria Florentina. We received your message and will reach out soon.<br><br>Gracias por contactar a Floreria Florentina. Hemos recibido su mensaje y nos comunicaremos pronto.";
+  }
+
+  popup.classList.add("show");
+  popup.setAttribute("aria-hidden", "false");
+}
+
+function closeSuccessPopup() {
+  const popup = document.getElementById("successPopup");
+  if (!popup) return;
+  popup.classList.remove("show");
+  popup.setAttribute("aria-hidden", "true");
+}
+
 function formatPrice(value) {
   const raw = String(value || "").replace(/[^0-9.]/g, "");
   const num = Number(raw);
@@ -85,8 +112,10 @@ async function submitInquiry(event) {
 
     if (!response.ok) throw new Error("Failed");
 
+    const inquiryType = data.type === "product" ? "product" : "contact";
     form.reset();
-    status.textContent = "Sent successfully. / Enviado correctamente.";
+    status.textContent = "";
+    showSuccessPopup(inquiryType);
   } catch (error) {
     status.textContent = "There was an error. Please try again. / Hubo un error. Inténtelo de nuevo.";
   }
@@ -107,3 +136,12 @@ modal.addEventListener("click", (event) => {
 document.getElementById("contactForm").addEventListener("submit", submitInquiry);
 
 renderProducts();
+
+const successClose = document.getElementById("successClose");
+const successPopup = document.getElementById("successPopup");
+if (successClose) successClose.addEventListener("click", closeSuccessPopup);
+if (successPopup) {
+  successPopup.addEventListener("click", (event) => {
+    if (event.target === successPopup) closeSuccessPopup();
+  });
+}

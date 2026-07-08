@@ -16,6 +16,20 @@ const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Flowers1234";
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "temporary-admin-token-change-this";
 const ADMIN_COOKIE = "floreria_admin_access";
+const ADMIN_NAME_COOKIE = "floreria_admin_name";
+
+const ADMIN_USERS = [
+  {
+    username: ADMIN_USERNAME,
+    password: ADMIN_PASSWORD,
+    name: "Admin"
+  },
+  {
+    username: "Yajaira123",
+    password: "Flowers1234",
+    name: "Yajaira"
+  }
+];
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -237,15 +251,22 @@ app.post("/api/inquiries", async (req, res) => {
 
 app.post("/api/admin/login", (req, res) => {
   const { username, password } = req.body;
+  const user = ADMIN_USERS.find((item) => item.username === username && item.password === password);
 
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+  if (user) {
     res.cookie(ADMIN_COOKIE, ADMIN_TOKEN, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 8
     });
-    return res.json({ success: true });
+    res.cookie(ADMIN_NAME_COOKIE, user.name, {
+      httpOnly: false,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 8
+    });
+    return res.json({ success: true, name: user.name });
   }
 
   return res.status(401).json({ error: "Invalid login." });
@@ -253,11 +274,13 @@ app.post("/api/admin/login", (req, res) => {
 
 app.post("/api/admin/logout", (req, res) => {
   res.clearCookie(ADMIN_COOKIE);
+  res.clearCookie(ADMIN_NAME_COOKIE);
   return res.json({ success: true });
 });
 
 app.get("/api/admin/inquiries", requireAdmin, (req, res) => {
-  return res.json(readInquiries());
+  const visibleInquiries = readInquiries().filter((item) => item.status !== "completed");
+  return res.json(visibleInquiries);
 });
 
 app.patch("/api/admin/inquiries/:id", requireAdmin, (req, res) => {
@@ -288,6 +311,19 @@ app.patch("/api/admin/inquiries/:id", requireAdmin, (req, res) => {
 
   return res.json({ success: true, inquiry });
 });
+
+app.delete("/api/admin/inquiries/:id", requireAdmin, (req, res) => {
+  const inquiries = readInquiries();
+  const filtered = inquiries.filter((item) => item.id !== req.params.id);
+
+  if (filtered.length === inquiries.length) {
+    return res.status(404).json({ error: "Inquiry not found." });
+  }
+
+  writeInquiries(filtered);
+  return res.json({ success: true });
+});
+
 
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));

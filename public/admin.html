@@ -6,20 +6,38 @@
   <title>Floreria Admin | Inquiries</title>
   <link rel="stylesheet" href="/styles.css" />
   <style>
-    .admin-wrap{max-width:1100px;margin:40px auto;padding:20px}
+    body{background:#fff8f3}
+    .admin-shell{max-width:1180px;margin:0 auto;padding:32px 20px}
+    .admin-hero{background:linear-gradient(135deg,#7a4b57,#b85c68);color:white;border-radius:30px;padding:34px;box-shadow:0 18px 50px rgba(47,40,37,.16);margin-bottom:24px}
+    .admin-hero h1{font-size:clamp(36px,6vw,64px);margin:0 0 10px}
+    .admin-hero p{font-size:18px;line-height:1.6;max-width:760px}
     .admin-card{background:white;border-radius:24px;padding:24px;box-shadow:0 14px 34px rgba(47,40,37,.08);margin-bottom:20px}
-    .inquiry{border:1px solid #ead4d6;border-radius:18px;padding:18px;margin:14px 0;background:white}
-    .status{font-weight:900;color:#b85c68}
-    select{padding:10px;border-radius:10px;border:1px solid #ead4d6}
+    .admin-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:20px 0}
+    .stat{background:#fff8f3;border:1px solid #ead8d5;border-radius:18px;padding:18px}
+    .stat strong{display:block;font-size:28px;color:#b85c68}
+    .inquiry{border:1px solid #ead4d6;border-radius:20px;padding:20px;margin:16px 0;background:white}
+    .inquiry-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+    .status{display:inline-block;font-weight:900;color:white;background:#b85c68;border-radius:999px;padding:8px 12px;font-size:13px}
+    .meta{color:#6f625d;font-size:14px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    select{padding:11px;border-radius:12px;border:1px solid #ead4d6;font-weight:800}
+    .delete-btn{background:#7a1d2b}
+    .empty{padding:34px;text-align:center;color:#6f625d}
+    @media(max-width:720px){.admin-toolbar{display:block}.admin-hero{padding:26px 20px}}
   </style>
 </head>
 <body>
-  <div class="admin-wrap">
-    <h1>Admin Portal</h1>
-    <h2>Inquiry Management / Administración de Solicitudes</h2>
+  <div class="admin-shell">
+    <section class="admin-hero">
+      <p class="eyebrow">Admin Portal / Portal Administrativo</p>
+      <h1 id="welcomeTitle">Welcome / Bienvenido</h1>
+      <p>Manage customer inquiries, update statuses, and remove completed or unnecessary requests.</p>
+      <p class="spanish">Administre solicitudes de clientes, actualice estados y elimine solicitudes completadas o innecesarias.</p>
+    </section>
 
     <form id="loginForm" class="admin-card">
-      <h3>Admin Login / Acceso Administrador</h3>
+      <h2>Admin Login / Acceso Administrador</h2>
       <label>Username / Usuario<input name="username" required /></label>
       <label>Password / Contraseña<input name="password" type="password" required /></label>
       <button type="submit">Login / Entrar</button>
@@ -27,7 +45,20 @@
     </form>
 
     <section id="dashboard" style="display:none">
-      <button id="logoutBtn">Logout / Salir</button>
+      <div class="admin-card admin-toolbar">
+        <div>
+          <h2>Inquiry Dashboard / Panel de Solicitudes</h2>
+          <p>Completed inquiries disappear from this active list. / Las solicitudes completadas desaparecen de esta lista activa.</p>
+        </div>
+        <button id="logoutBtn">Logout / Salir</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><strong id="newCount">0</strong>New / Nuevo</div>
+        <div class="stat"><strong id="progressCount">0</strong>In Progress / En progreso</div>
+        <div class="stat"><strong id="totalCount">0</strong>Active / Activas</div>
+      </div>
+
       <div id="inquiries"></div>
     </section>
   </div>

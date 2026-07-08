@@ -52,3 +52,60 @@ footer{text-align:center;padding:40px;color:#7b706c}
   .about-grid,.contact-grid,.product-detail{grid-template-columns:1fr}
   .section{padding:50px 20px}
 }
+
+.success-popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:rgba(47,40,37,.66);
+  padding:24px;
+  align-items:center;
+  justify-content:center;
+}
+.success-popup.show{
+  display:flex;
+}
+.success-card{
+  width:min(560px,100%);
+  background:white;
+  border-radius:30px;
+  padding:34px 28px;
+  text-align:center;
+  position:relative;
+  box-shadow:0 28px 90px rgba(0,0,0,.28);
+  border:1px solid #ead8d5;
+}
+.success-icon{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:#607b50;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  font-weight:900;
+  margin:0 auto 18px;
+}
+.success-card h2{
+  font-size:clamp(26px,4vw,38px);
+  margin-bottom:14px;
+}
+.success-card p{
+  font-size:17px;
+  line-height:1.65;
+  color:#5d5552;
+}
+.success-close{
+  position:absolute;
+  top:14px;
+  right:16px;
+  width:42px;
+  height:42px;
+  padding:0;
+  background:#fff8f3;
+  color:#b85c68;
+  font-size:26px;
+}
