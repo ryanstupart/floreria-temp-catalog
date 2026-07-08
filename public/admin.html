@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floreria Admin | Inquiries</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .admin-wrap{max-width:1100px;margin:40px auto;padding:20px}
+    .admin-card{background:white;border-radius:24px;padding:24px;box-shadow:0 14px 34px rgba(47,40,37,.08);margin-bottom:20px}
+    .inquiry{border:1px solid #ead4d6;border-radius:18px;padding:18px;margin:14px 0;background:white}
+    .status{font-weight:900;color:#b85c68}
+    select{padding:10px;border-radius:10px;border:1px solid #ead4d6}
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <h1>Admin Portal</h1>
+    <h2>Inquiry Management / Administración de Solicitudes</h2>
+
+    <form id="loginForm" class="admin-card">
+      <h3>Admin Login / Acceso Administrador</h3>
+      <label>Username / Usuario<input name="username" required /></label>
+      <label>Password / Contraseña<input name="password" type="password" required /></label>
+      <button type="submit">Login / Entrar</button>
+      <p class="form-status"></p>
+    </form>
+
+    <section id="dashboard" style="display:none">
+      <button id="logoutBtn">Logout / Salir</button>
+      <div id="inquiries"></div>
+    </section>
+  </div>
+
+  <script src="/admin.js"></script>
+</body>
+</html>

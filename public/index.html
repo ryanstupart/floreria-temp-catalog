@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floreria Florentina LLC | Floral Catalog</title>
+  <meta name="description" content="Browse Floreria Florentina floral arrangements and submit product inquiries." />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="/">Floreria Florentina</a>
+    <nav>
+      <a href="#catalog">Catalog / Catálogo</a>
+      <a href="#about">About / Historia</a>
+      <a href="#contact">Contact / Contacto</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <p class="eyebrow">Floral arrangements for every occasion / Arreglos florales para toda ocasión</p>
+      <h1>Blooming Happiness, One Bouquet at a Time</h1>
+      <h2>Floreciendo felicidad, un ramo a la vez</h2>
+      <p>Explore our floral catalog and send us an inquiry for the arrangement you love.</p>
+      <p class="spanish">Explore nuestro catálogo floral y envíenos una solicitud por el arreglo que le guste.</p>
+      <a class="button" href="#catalog">View Catalog / Ver Catálogo</a>
+    </div>
+  </section>
+
+  <main>
+    <section id="catalog" class="section">
+      <div class="section-title">
+        <p class="eyebrow">Catalog / Catálogo</p>
+        <h2>Product Catalog</h2>
+        <p>Click any product to view details and submit an inquiry.</p>
+        <p class="spanish">Haga clic en cualquier producto para ver detalles y enviar una solicitud.</p>
+      </div>
+      <div id="productsGrid" class="products-grid"></div>
+    </section>
+
+    <section id="about" class="section about-grid">
+      <div>
+        <p class="eyebrow">About Floreria Florentina / Sobre Floreria Florentina</p>
+        <h2>Blooming Happiness, One Bouquet at a Time</h2>
+        <p>Welcome to Florería Florentina LLC, where we are committed to designing beautiful floral arrangements that are perfect for all occasions. From custom bouquets to stuffed animals, balloons, and lovely gifts, we offer a wide range of products that is sure to satisfy all of your floral needs.</p>
+        <p class="spanish">Bienvenido a Florería Florentina LLC, donde nos comprometemos a diseñar hermosos arreglos florales perfectos para toda ocasión. Desde ramos personalizados hasta peluches, globos y hermosos regalos, ofrecemos una amplia variedad de productos para sus necesidades florales.</p>
+      </div>
+
+      <div class="story-card">
+        <h3>My Story / Mi Historia</h3>
+        <p>Floreria Florentina started in honor of my mom, the strongest woman I know. My mother started her own small business when I was 11 years old. She began selling small items in a small location inside a farmers market, then later had the opportunity to grow her business into a bigger location.</p>
+        <p>I have been with her since I was 13 years old, and she taught me to work hard and be independent. She is the reason I started creating floral arrangements, always pushing me to be a better person and overachieve.</p>
+        <p>She learned this from her own mother, my grandma, who was also a big part of my life and helped raise me until I was 5 years old. She passed away in 2016, so I named my shop after her. She is the reason my mother is such a hard worker, and both of them taught me to achieve bigger and better.</p>
+        <p class="spanish">Floreria Florentina nació en honor a mi mamá, la mujer más fuerte que conozco. Ella me enseñó a trabajar duro, ser independiente y siempre buscar algo mejor. Este negocio también honra a mi abuela, quien fue una gran parte de mi vida y cuya fuerza sigue inspirando nuestra historia.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-grid">
+      <div>
+        <p class="eyebrow">Contact / Contacto</p>
+        <h2>Contact Floreria Florentina</h2>
+        <p><strong>Location / Ubicación:</strong><br />3303 Chamblee Dunwoody Rd.<br />Chamblee, Georgia 30341</p>
+        <p><strong>Email / Correo:</strong> floreriaflorentina4@gmail.com</p>
+        <p><strong>Phone / Teléfono:</strong> 770-837-3856</p>
+        <p><strong>Opening Hours / Horario:</strong><br />
+          Monday, Wednesday–Friday: 10:00 AM – 8:00 PM<br />
+          Lunes, miércoles–viernes: 10:00 AM – 8:00 PM<br /><br />
+          Tuesday: 10:00 AM – 7:00 PM<br />
+          Martes: 10:00 AM – 7:00 PM<br /><br />
+          Saturday–Sunday: 9:00 AM – 8:00 PM<br />
+          Sábado–domingo: 9:00 AM – 8:00 PM
+        </p>
+      </div>
+
+      <form id="contactForm" class="form-card">
+        <h3>Send a Message / Enviar Mensaje</h3>
+        <input type="hidden" name="type" value="contact" />
+        <label>Name / Nombre<input name="name" required /></label>
+        <label>Email / Correo<input name="email" type="email" required /></label>
+        <label>Phone / Teléfono<input name="phone" /></label>
+        <label>Message / Mensaje<textarea name="message" required></textarea></label>
+        <button type="submit">Send Message / Enviar Mensaje</button>
+        <p class="form-status"></p>
+      </form>
+    </section>
+  </main>
+
+  <div id="productModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeModal" class="close-button" aria-label="Close">×</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Floreria Florentina LLC</p>
+  </footer>
+
+  <script src="/products.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
