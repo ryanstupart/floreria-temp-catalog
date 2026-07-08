@@ -72,3 +72,24 @@ RESEND_API_KEY=your_resend_api_key
 - For testing, emails are sent to `ryanstupart@gmail.com`.
 - Later, change `EMAIL_TO` to the business inbox if needed.
 - Inquiries are currently stored in `data/inquiries.json`. For long-term production use, move this to a database or persistent disk.
+
+
+## Email Behavior
+
+The app now sends two emails per inquiry:
+
+1. Customer-facing confirmation email
+   - Sent to the customer who submitted the form
+   - English + Spanish
+   - Includes customer details, product name, product image when available, and Floreria contact information
+
+2. Admin notification email
+   - Sent to EMAIL_TO
+   - English + Spanish
+   - Includes inquiry details and admin portal link
+
+Required Render variable:
+
+```text
+PUBLIC_SITE_URL=https://floreriaflorentina.com
+```

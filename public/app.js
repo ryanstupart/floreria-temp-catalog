@@ -45,6 +45,7 @@ function openProduct(product) {
           <input type="hidden" name="type" value="product">
           <input type="hidden" name="productId" value="${product.id}">
           <input type="hidden" name="productTitle" value="${product.title}">
+          <input type="hidden" name="productImage" value="${product.image || ""}">
           <label>Name / Nombre<input name="name" required></label>
           <label>Email / Correo<input type="email" name="email" required></label>
           <label>Phone / Teléfono<input name="phone"></label>
