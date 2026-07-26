@@ -312,14 +312,21 @@ async function sendInquiryEmail(inquiry) {
 
 // Public product catalog. Uses Supabase when configured and falls back to the bundled catalog.
 app.get("/api/products", async (_req, res) => {
+  res.set("Cache-Control", "no-store");
+  const legacyProducts = loadLegacyProducts();
   try {
-    if (!supabase) return res.json(loadLegacyProducts());
+    if (!supabase) return res.json(legacyProducts);
     const products = await fetchDbProducts();
-    return res.json(products.length ? products : loadLegacyProducts());
+    return res.json(products.length ? products : legacyProducts);
   } catch (error) {
     console.error("Product load failed:", error);
-    return res.json(loadLegacyProducts());
+    return res.json(legacyProducts);
   }
+});
+
+app.get("/api/products/legacy", (_req, res) => {
+  res.set("Cache-Control", "no-store");
+  return res.json(loadLegacyProducts());
 });
 
 app.get("/api/admin/products", requireAdmin, async (_req, res) => {

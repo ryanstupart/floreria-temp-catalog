@@ -58,13 +58,24 @@ async function renderProducts() {
   try {
     const response = await fetch("/api/products");
     if (!response.ok) throw new Error("Unable to load products");
-    catalogProducts = await response.json();
+    const apiProducts = await response.json();
+    catalogProducts = Array.isArray(apiProducts) && apiProducts.length
+      ? apiProducts
+      : (window.PRODUCTS || []);
   } catch (_error) {
     catalogProducts = window.PRODUCTS || [];
   }
   const products = catalogProducts.filter((p) => !/test/i.test(p.title || p.name || ""));
   grid.innerHTML = "";
-  products.forEach((product) => grid.appendChild(productCard({ ...product, title: product.title || product.name })));
+  if (!products.length) {
+    grid.innerHTML = '<p class="catalog-loading">No products are available right now. / No hay productos disponibles en este momento.</p>';
+    return;
+  }
+  products.forEach((product) => grid.appendChild(productCard({
+    ...product,
+    title: product.title || product.name,
+    image: product.image || (Array.isArray(product.images) ? product.images[0] : "")
+  })));
 }
 async function submitInquiry(event) {
   event.preventDefault(); const form = event.target; const status = form.querySelector(".form-status"); const data = Object.fromEntries(new FormData(form).entries()); status.textContent = "Sending... / Enviando...";
