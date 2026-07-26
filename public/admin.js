@@ -14,7 +14,41 @@ function resetProductForm(){productForm.reset();productForm.is_visible.checked=t
 cancelEditBtn.addEventListener("click",resetProductForm);
 function editProduct(id){const p=products.find(x=>x.id===id);if(!p)return;productIdInput.value=p.id;productForm.name.value=p.title;productForm.description.value=p.description||"";productForm.price.value=p.price;productForm.is_visible.checked=p.isVisible;document.getElementById("productFormTitle").textContent="Edit Product / Editar Producto";cancelEditBtn.style.display="inline-block";renderExistingImages(p);window.scrollTo({top:0,behavior:"smooth"})}
 function renderExistingImages(p){existingImages.innerHTML=(p.images||[]).map(url=>`<div class="existing-image"><img src="${esc(url)}"><button type="button" data-remove-image="${esc(url)}">×</button></div>`).join("");existingImages.querySelectorAll("[data-remove-image]").forEach(btn=>btn.addEventListener("click",async()=>{if(!confirm("Remove this photo? / ¿Eliminar esta foto?"))return;const r=await fetch(`/api/admin/products/${p.id}/images`,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({imageUrl:btn.dataset.removeImage})});if(r.ok){await loadProducts();editProduct(p.id)}}))}
-productForm.addEventListener("submit",async e=>{e.preventDefault();const status=productForm.querySelector(".form-status"),id=productIdInput.value,fd=new FormData(productForm);fd.set("is_visible",productForm.is_visible.checked?"true":"false");status.textContent="Saving... / Guardando...";const r=await fetch(id?`/api/admin/products/${id}`:"/api/admin/products",{method:id?"PATCH":"POST",body:fd});const result=await r.json().catch(()=>({}));if(!r.ok){status.textContent=result.error||"Could not save product.";return}status.textContent="Saved successfully. / Guardado correctamente.";resetProductForm();await loadProducts()});
+productForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const status=productForm.querySelector(".form-status");
+  const saveButton=document.getElementById("saveProductBtn");
+  const id=productIdInput.value;
+  const fd=new FormData(productForm);
+  fd.set("is_visible",productForm.is_visible.checked?"true":"false");
+
+  if(!id && !photosInput.files.length){
+    status.textContent="Please choose at least one product photo. / Seleccione al menos una foto.";
+    return;
+  }
+
+  status.textContent=photosInput.files.length
+    ?"Uploading photos and saving product... / Subiendo fotos y guardando producto..."
+    :"Saving changes... / Guardando cambios...";
+  saveButton.disabled=true;
+
+  try{
+    const r=await fetch(id?`/api/admin/products/${id}`:"/api/admin/products",{
+      method:id?"PATCH":"POST",
+      body:fd
+    });
+    const result=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(result.error||"Could not save product.");
+
+    resetProductForm();
+    await loadProducts();
+    status.textContent="Saved successfully. The product is now available in Supabase. / Guardado correctamente.";
+  }catch(error){
+    status.textContent=`${error.message} / No se pudo guardar el producto.`;
+  }finally{
+    saveButton.disabled=false;
+  }
+});
 async function loadProducts(){const r=await fetch("/api/admin/products");if(!r.ok){productsList.innerHTML='<div class="admin-card empty">Supabase is not configured or the product tables are unavailable.</div>';return}products=await r.json();document.getElementById("productCount").textContent=products.length;document.getElementById("visibleCount").textContent=products.filter(p=>p.isVisible).length;document.getElementById("hiddenCount").textContent=products.filter(p=>!p.isVisible).length;if(!products.length){productsList.innerHTML='<div class="admin-card empty">No Supabase products yet. Use “Import Current Catalog” once or add a product manually.</div>';return}productsList.innerHTML=products.map(p=>`<article class="product-admin-card"><img src="${esc(p.image||"")}" alt=""><div class="product-admin-content"><div class="product-top"><span class="badge ${p.isVisible?"":"hidden"}">${p.isVisible?"Visible":"Hidden"}</span><strong>${money(p.price)}</strong></div><h3>${esc(p.title)}</h3><p>${esc((p.description||"").slice(0,130))}</p><div class="actions"><button data-edit="${p.id}">Edit</button><button class="secondary" data-toggle="${p.id}">${p.isVisible?"Hide":"Publish"}</button><button class="delete-btn" data-delete-product="${p.id}">Delete</button></div></div></article>`).join("");productsList.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>editProduct(b.dataset.edit)));productsList.querySelectorAll("[data-toggle]").forEach(b=>b.addEventListener("click",async()=>{const p=products.find(x=>x.id===b.dataset.toggle);const fd=new FormData();fd.set("is_visible",(!p.isVisible).toString());await fetch(`/api/admin/products/${p.id}`,{method:"PATCH",body:fd});loadProducts()}));productsList.querySelectorAll("[data-delete-product]").forEach(b=>b.addEventListener("click",async()=>{if(!confirm("Delete this product and its uploaded photos? / ¿Eliminar este producto y sus fotos?"))return;await fetch(`/api/admin/products/${b.dataset.deleteProduct}`,{method:"DELETE"});loadProducts()}))}
 importLegacyBtn.addEventListener("click",async()=>{if(!confirm("Import the entire current catalog into an empty Supabase table? Run this only once."))return;importLegacyBtn.disabled=true;importLegacyBtn.textContent="Importing...";const r=await fetch("/api/admin/products/import-legacy",{method:"POST"});const result=await r.json().catch(()=>({}));alert(r.ok?`${result.imported} products imported successfully.`:(result.error||"Import failed."));importLegacyBtn.disabled=false;importLegacyBtn.textContent="Import Current Catalog";loadProducts()});
 async function loadInquiries(){const div=document.getElementById("inquiries"),r=await fetch("/api/admin/inquiries");if(!r.ok)return;const items=await r.json();document.getElementById("newCount").textContent=items.filter(i=>i.status==="new").length;document.getElementById("progressCount").textContent=items.filter(i=>i.status==="in_progress").length;document.getElementById("totalCount").textContent=items.length;if(!items.length){div.innerHTML='<div class="admin-card empty"><h2>No active inquiries</h2></div>';return}div.innerHTML=items.map(i=>`<div class="inquiry"><div class="inquiry-top"><div><span class="status">${labels[i.status]||i.statusLabel}</span><h2>${esc(i.productTitle||"General Contact")}</h2><p class="meta">${new Date(i.createdAt).toLocaleString()}</p></div><label>Status<select data-id="${i.id}"><option value="new" ${i.status==="new"?"selected":""}>New</option><option value="in_progress" ${i.status==="in_progress"?"selected":""}>In Progress</option><option value="completed">Completed</option></select></label></div><p><strong>Name:</strong> ${esc(i.name)}</p><p><strong>Email:</strong> ${esc(i.email)}</p><p><strong>Phone:</strong> ${esc(i.phone)}</p><p><strong>Message:</strong><br>${esc(i.message)}</p><button class="delete-btn" data-delete="${i.id}">Delete</button></div>`).join("");div.querySelectorAll("select[data-id]").forEach(s=>s.addEventListener("change",async()=>{await fetch(`/api/admin/inquiries/${s.dataset.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:s.value})});loadInquiries()}));div.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",async()=>{if(confirm("Delete this inquiry?")){await fetch(`/api/admin/inquiries/${b.dataset.delete}`,{method:"DELETE"});loadInquiries()}}))}

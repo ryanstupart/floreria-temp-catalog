@@ -65,7 +65,7 @@ async function renderProducts() {
   } catch (_error) {
     catalogProducts = window.PRODUCTS || [];
   }
-  const products = catalogProducts.filter((p) => !/test/i.test(p.title || p.name || ""));
+  const products = catalogProducts;
   grid.innerHTML = "";
   if (!products.length) {
     grid.innerHTML = '<p class="catalog-loading">No products are available right now. / No hay productos disponibles en este momento.</p>';

@@ -112,25 +112,74 @@ function safeStorageName(originalName) {
 }
 
 async function uploadProductFiles(productId, files) {
+  if (!files.length) return [];
+
+  const { data: existingImages, error: existingError } = await supabase
+    .from("product_images")
+    .select("display_order")
+    .eq("product_id", productId)
+    .order("display_order", { ascending: false })
+    .limit(1);
+  if (existingError) throw existingError;
+
+  const startingOrder = existingImages?.length
+    ? Number(existingImages[0].display_order || 0) + 1
+    : 0;
+
   const rows = [];
-  for (let index = 0; index < files.length; index += 1) {
-    const file = files[index];
-    const storagePath = `${productId}/${safeStorageName(file.originalname)}`;
-    const { error: uploadError } = await supabase.storage
-      .from(STORAGE_BUCKET)
-      .upload(storagePath, file.buffer, { contentType: file.mimetype, upsert: false });
-    if (uploadError) throw uploadError;
-    const { data: publicData } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);
-    rows.push({
-      product_id: productId,
-      image_url: publicData.publicUrl,
-      storage_path: storagePath,
-      display_order: index
-    });
-  }
-  if (rows.length) {
-    const { error } = await supabase.from("product_images").insert(rows);
-    if (error) throw error;
+  const uploadedPaths = [];
+
+  try {
+    for (let index = 0; index < files.length; index += 1) {
+      const file = files[index];
+      const storagePath = `${productId}/${safeStorageName(file.originalname)}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .upload(storagePath, file.buffer, {
+          contentType: file.mimetype,
+          cacheControl: "3600",
+          upsert: false
+        });
+      if (uploadError) {
+        throw new Error(`Photo upload failed for ${file.originalname}: ${uploadError.message}`);
+      }
+
+      uploadedPaths.push(storagePath);
+      const { data: publicData } = supabase.storage
+        .from(STORAGE_BUCKET)
+        .getPublicUrl(storagePath);
+
+      if (!publicData?.publicUrl) {
+        throw new Error(`Supabase did not return a public URL for ${file.originalname}.`);
+      }
+
+      rows.push({
+        product_id: productId,
+        image_url: publicData.publicUrl,
+        storage_path: storagePath,
+        display_order: startingOrder + index
+      });
+    }
+
+    const { error: insertError } = await supabase
+      .from("product_images")
+      .insert(rows);
+    if (insertError) {
+      throw new Error(`Photo record could not be saved: ${insertError.message}`);
+    }
+
+    return rows;
+  } catch (error) {
+    if (uploadedPaths.length) {
+      const { error: cleanupError } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .remove(uploadedPaths);
+      if (cleanupError) {
+        console.error("Unable to clean up failed photo uploads:", cleanupError.message);
+      }
+    }
+    throw error;
   }
 }
 
@@ -341,26 +390,57 @@ app.get("/api/admin/products", requireAdmin, async (_req, res) => {
 
 app.post("/api/admin/products", requireAdmin, upload.array("photos", 8), async (req, res) => {
   if (!ensureSupabase(res)) return;
+
   const name = String(req.body.name || "").trim();
   const description = String(req.body.description || "").trim();
   const price = Number(req.body.price);
   const isVisible = String(req.body.is_visible) !== "false";
+  const files = req.files || [];
+
   if (!name || !Number.isFinite(price) || price < 0) {
     return res.status(400).json({ error: "A product name and valid price are required." });
   }
+  if (!files.length) {
+    return res.status(400).json({
+      error: "Please select at least one JPEG, PNG, or WebP product photo."
+    });
+  }
+
+  let createdProductId = null;
+
   try {
     const { data: product, error } = await supabase
       .from("products")
       .insert({ name, description, price, is_visible: isVisible })
       .select()
       .single();
+
     if (error) throw error;
-    await uploadProductFiles(product.id, req.files || []);
+    createdProductId = product.id;
+
+    await uploadProductFiles(product.id, files);
+
     const products = await fetchDbProducts({ includeHidden: true });
-    return res.status(201).json(products.find((item) => item.id === product.id));
+    const savedProduct = products.find((item) => item.id === product.id);
+    if (!savedProduct) throw new Error("The product was saved but could not be reloaded.");
+
+    return res.status(201).json(savedProduct);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error.message });
+    console.error("Product creation failed:", error);
+
+    if (createdProductId) {
+      const { error: rollbackError } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", createdProductId);
+      if (rollbackError) {
+        console.error("Product rollback failed:", rollbackError.message);
+      }
+    }
+
+    return res.status(500).json({
+      error: error.message || "The product could not be saved."
+    });
   }
 });
 
@@ -573,6 +653,25 @@ app.delete("/api/admin/inquiries/:id", requireAdmin, (req, res) => {
 
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
+});
+
+app.use((error, _req, res, _next) => {
+  console.error("Request failed:", error);
+
+  if (error instanceof multer.MulterError) {
+    const messages = {
+      LIMIT_FILE_SIZE: "Each photo must be 8 MB or smaller.",
+      LIMIT_FILE_COUNT: "You can upload no more than 8 photos at one time.",
+      LIMIT_UNEXPECTED_FILE: "The photo upload field was not recognized."
+    };
+    return res.status(400).json({
+      error: messages[error.code] || `Photo upload error: ${error.message}`
+    });
+  }
+
+  return res.status(400).json({
+    error: error.message || "The request could not be completed."
+  });
 });
 
 app.listen(PORT, () => {
