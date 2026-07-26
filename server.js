@@ -6,11 +6,31 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const { Resend } = require("resend");
+const multer = require("multer");
+const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const DATA_FILE = path.join(__dirname, "data", "inquiries.json");
+const LEGACY_PRODUCTS_FILE = path.join(__dirname, "public", "products.js");
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || "product-images";
+const supabase = SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    })
+  : null;
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 8 * 1024 * 1024, files: 8 },
+  fileFilter: (_req, file, cb) => {
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    cb(allowed.includes(file.mimetype) ? null : new Error("Only JPEG, PNG, and WebP images are allowed."), allowed.includes(file.mimetype));
+  }
+});
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Flowers1234";
@@ -31,10 +51,88 @@ const ADMIN_USERS = [
   }
 ];
 
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+
+function ensureSupabase(res) {
+  if (supabase) return true;
+  res.status(503).json({ error: "Supabase is not configured on this environment." });
+  return false;
+}
+
+function loadLegacyProducts() {
+  try {
+    const source = fs.readFileSync(LEGACY_PRODUCTS_FILE, "utf8");
+    const match = source.match(/window\.PRODUCTS\s*=\s*(\[[\s\S]*\]);?\s*$/);
+    return match ? JSON.parse(match[1]) : [];
+  } catch (error) {
+    console.error("Unable to read legacy products:", error.message);
+    return [];
+  }
+}
+
+function mapDbProduct(row) {
+  const images = (row.product_images || [])
+    .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+    .map((item) => item.image_url);
+  return {
+    id: row.id,
+    title: row.name,
+    name: row.name,
+    description: row.description || "",
+    price: Number(row.price),
+    image: images[0] || "",
+    images,
+    isVisible: row.is_visible
+  };
+}
+
+async function fetchDbProducts({ includeHidden = false } = {}) {
+  let query = supabase
+    .from("products")
+    .select("id,name,description,price,is_visible,created_at,updated_at,product_images(id,image_url,storage_path,display_order)")
+    .order("created_at", { ascending: false });
+  if (!includeHidden) query = query.eq("is_visible", true);
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data || []).map(mapDbProduct);
+}
+
+function safeStorageName(originalName) {
+  const ext = path.extname(originalName || "").toLowerCase() || ".jpg";
+  const base = path.basename(originalName || "image", ext)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60) || "image";
+  return `${Date.now()}-${crypto.randomUUID()}-${base}${ext}`;
+}
+
+async function uploadProductFiles(productId, files) {
+  const rows = [];
+  for (let index = 0; index < files.length; index += 1) {
+    const file = files[index];
+    const storagePath = `${productId}/${safeStorageName(file.originalname)}`;
+    const { error: uploadError } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .upload(storagePath, file.buffer, { contentType: file.mimetype, upsert: false });
+    if (uploadError) throw uploadError;
+    const { data: publicData } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);
+    rows.push({
+      product_id: productId,
+      image_url: publicData.publicUrl,
+      storage_path: storagePath,
+      display_order: index
+    });
+  }
+  if (rows.length) {
+    const { error } = await supabase.from("product_images").insert(rows);
+    if (error) throw error;
+  }
+}
 
 function readInquiries() {
   try {
@@ -95,7 +193,7 @@ function emailShell(title, subtitle, bodyHtml) {
               <td style="background:#fff8f3;padding:22px 28px;text-align:center;color:#6f625d;font-size:14px;line-height:1.6;">
                 <strong>Floreria Florentina LLC</strong><br>
                 3303 Chamblee Dunwoody Rd., Chamblee, Georgia 30341<br>
-                770-837-3856 · floreriaflorentina4@gmail.com
+                770-873-6614 · floreriaflorentina4@gmail.com
               </td>
             </tr>
           </table>
@@ -210,6 +308,147 @@ async function sendInquiryEmail(inquiry) {
 
   await Promise.all(sendTasks);
 }
+
+
+// Public product catalog. Uses Supabase when configured and falls back to the bundled catalog.
+app.get("/api/products", async (_req, res) => {
+  try {
+    if (!supabase) return res.json(loadLegacyProducts());
+    const products = await fetchDbProducts();
+    return res.json(products.length ? products : loadLegacyProducts());
+  } catch (error) {
+    console.error("Product load failed:", error);
+    return res.json(loadLegacyProducts());
+  }
+});
+
+app.get("/api/admin/products", requireAdmin, async (_req, res) => {
+  if (!ensureSupabase(res)) return;
+  try {
+    return res.json(await fetchDbProducts({ includeHidden: true }));
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/admin/products", requireAdmin, upload.array("photos", 8), async (req, res) => {
+  if (!ensureSupabase(res)) return;
+  const name = String(req.body.name || "").trim();
+  const description = String(req.body.description || "").trim();
+  const price = Number(req.body.price);
+  const isVisible = String(req.body.is_visible) !== "false";
+  if (!name || !Number.isFinite(price) || price < 0) {
+    return res.status(400).json({ error: "A product name and valid price are required." });
+  }
+  try {
+    const { data: product, error } = await supabase
+      .from("products")
+      .insert({ name, description, price, is_visible: isVisible })
+      .select()
+      .single();
+    if (error) throw error;
+    await uploadProductFiles(product.id, req.files || []);
+    const products = await fetchDbProducts({ includeHidden: true });
+    return res.status(201).json(products.find((item) => item.id === product.id));
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch("/api/admin/products/:id", requireAdmin, upload.array("photos", 8), async (req, res) => {
+  if (!ensureSupabase(res)) return;
+  const updates = {};
+  if (req.body.name !== undefined) updates.name = String(req.body.name).trim();
+  if (req.body.description !== undefined) updates.description = String(req.body.description).trim();
+  if (req.body.price !== undefined) {
+    const price = Number(req.body.price);
+    if (!Number.isFinite(price) || price < 0) return res.status(400).json({ error: "Enter a valid price." });
+    updates.price = price;
+  }
+  if (req.body.is_visible !== undefined) updates.is_visible = String(req.body.is_visible) === "true";
+  try {
+    if (Object.keys(updates).length) {
+      const { error } = await supabase.from("products").update(updates).eq("id", req.params.id);
+      if (error) throw error;
+    }
+    await uploadProductFiles(req.params.id, req.files || []);
+    const products = await fetchDbProducts({ includeHidden: true });
+    const product = products.find((item) => item.id === req.params.id);
+    if (!product) return res.status(404).json({ error: "Product not found." });
+    return res.json(product);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete("/api/admin/products/:id/images", requireAdmin, async (req, res) => {
+  if (!ensureSupabase(res)) return;
+  const imageUrl = String(req.body.imageUrl || "");
+  try {
+    const { data: image, error: findError } = await supabase
+      .from("product_images").select("id,storage_path").eq("product_id", req.params.id).eq("image_url", imageUrl).maybeSingle();
+    if (findError) throw findError;
+    if (!image) return res.status(404).json({ error: "Image not found." });
+    if (image.storage_path) await supabase.storage.from(STORAGE_BUCKET).remove([image.storage_path]);
+    const { error } = await supabase.from("product_images").delete().eq("id", image.id);
+    if (error) throw error;
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete("/api/admin/products/:id", requireAdmin, async (req, res) => {
+  if (!ensureSupabase(res)) return;
+  try {
+    const { data: images, error: imageError } = await supabase.from("product_images").select("storage_path").eq("product_id", req.params.id);
+    if (imageError) throw imageError;
+    const paths = (images || []).map((item) => item.storage_path).filter(Boolean);
+    if (paths.length) await supabase.storage.from(STORAGE_BUCKET).remove(paths);
+    const { error } = await supabase.from("products").delete().eq("id", req.params.id);
+    if (error) throw error;
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/admin/products/import-legacy", requireAdmin, async (_req, res) => {
+  if (!ensureSupabase(res)) return;
+  try {
+    const legacy = loadLegacyProducts().filter((p) => !/test/i.test(p.title || ""));
+    const { count, error: countError } = await supabase.from("products").select("id", { count: "exact", head: true });
+    if (countError) throw countError;
+    if (count > 0) return res.status(409).json({ error: "Supabase already contains products. Import was stopped to prevent duplicates." });
+    let imported = 0;
+    for (const item of legacy) {
+      const { data: product, error } = await supabase.from("products").insert({
+        name: item.title,
+        description: item.description || "",
+        price: Number(item.price) || 0,
+        is_visible: true
+      }).select().single();
+      if (error) throw error;
+      if (item.image) {
+        const { error: imageError } = await supabase.from("product_images").insert({
+          product_id: product.id,
+          image_url: item.image,
+          storage_path: null,
+          display_order: 0
+        });
+        if (imageError) throw imageError;
+      }
+      imported += 1;
+    }
+    return res.json({ success: true, imported });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+});
 
 app.post("/api/inquiries", async (req, res) => {
   const { type, productId, productTitle, productImage, name, email, phone, message } = req.body;

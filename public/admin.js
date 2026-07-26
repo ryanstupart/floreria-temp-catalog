@@ -1,133 +1,21 @@
-const loginForm = document.getElementById("loginForm");
-const dashboard = document.getElementById("dashboard");
-const inquiriesDiv = document.getElementById("inquiries");
-const logoutBtn = document.getElementById("logoutBtn");
-const welcomeTitle = document.getElementById("welcomeTitle");
-
-const labels = {
-  new: "New / Nuevo",
-  in_progress: "In Progress / En progreso",
-  completed: "Completed / Completado"
-};
-
-function getCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(name + "="))
-    ?.split("=")[1];
-}
-
-function setWelcome(name) {
-  const cleanName = decodeURIComponent(name || "Admin");
-  welcomeTitle.textContent = `Welcome, ${cleanName} / Bienvenido, ${cleanName}`;
-}
-
-loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const status = loginForm.querySelector(".form-status");
-  const data = Object.fromEntries(new FormData(loginForm).entries());
-
-  const response = await fetch("/api/admin/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-
-  if (response.ok) {
-    const result = await response.json();
-    loginForm.style.display = "none";
-    dashboard.style.display = "block";
-    setWelcome(result.name);
-    loadInquiries();
-  } else {
-    status.textContent = "Invalid login. / Acceso incorrecto.";
-  }
-});
-
-logoutBtn.addEventListener("click", async () => {
-  await fetch("/api/admin/logout", { method: "POST" });
-  location.reload();
-});
-
-async function loadInquiries() {
-  const response = await fetch("/api/admin/inquiries");
-  if (!response.ok) return;
-
-  const items = await response.json();
-
-  document.getElementById("newCount").textContent = items.filter((item) => item.status === "new").length;
-  document.getElementById("progressCount").textContent = items.filter((item) => item.status === "in_progress").length;
-  document.getElementById("totalCount").textContent = items.length;
-
-  if (!items.length) {
-    inquiriesDiv.innerHTML = `<div class="admin-card empty"><h2>No active inquiries / No hay solicitudes activas</h2><p>New customer inquiries will appear here.</p><p class="spanish">Las nuevas solicitudes aparecerán aquí.</p></div>`;
-    return;
-  }
-
-  inquiriesDiv.innerHTML = "";
-
-  items.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "inquiry";
-    div.innerHTML = `
-      <div class="inquiry-top">
-        <div>
-          <span class="status">${labels[item.status] || item.statusLabel}</span>
-          <h2>${item.productTitle || "General Contact / Contacto General"}</h2>
-          <p class="meta">${new Date(item.createdAt).toLocaleString()}</p>
-        </div>
-        <div>
-          <label>Status / Estado
-            <select data-id="${item.id}">
-              <option value="new" ${item.status === "new" ? "selected" : ""}>New / Nuevo</option>
-              <option value="in_progress" ${item.status === "in_progress" ? "selected" : ""}>In Progress / En progreso</option>
-              <option value="completed" ${item.status === "completed" ? "selected" : ""}>Completed / Completado</option>
-            </select>
-          </label>
-        </div>
-      </div>
-
-      <p><strong>Name / Nombre:</strong> ${item.name}</p>
-      <p><strong>Email:</strong> ${item.email}</p>
-      <p><strong>Phone / Teléfono:</strong> ${item.phone || ""}</p>
-      <p><strong>Message / Mensaje:</strong><br>${item.message}</p>
-
-      <div class="actions">
-        <button class="delete-btn" data-delete="${item.id}">Delete / Eliminar</button>
-      </div>
-    `;
-    inquiriesDiv.appendChild(div);
-  });
-
-  document.querySelectorAll("select[data-id]").forEach((select) => {
-    select.addEventListener("change", async () => {
-      await fetch(`/api/admin/inquiries/${select.dataset.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: select.value })
-      });
-      loadInquiries();
-    });
-  });
-
-  document.querySelectorAll("button[data-delete]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const confirmed = confirm("Delete this inquiry? / ¿Eliminar esta solicitud?");
-      if (!confirmed) return;
-
-      await fetch(`/api/admin/inquiries/${button.dataset.delete}`, {
-        method: "DELETE"
-      });
-      loadInquiries();
-    });
-  });
-}
-
-// If already logged in, try loading dashboard
-if (getCookie("floreria_admin_name")) {
-  loginForm.style.display = "none";
-  dashboard.style.display = "block";
-  setWelcome(getCookie("floreria_admin_name"));
-  loadInquiries();
-}
+const loginForm=document.getElementById("loginForm"),dashboard=document.getElementById("dashboard"),logoutBtn=document.getElementById("logoutBtn"),welcomeTitle=document.getElementById("welcomeTitle");
+const productForm=document.getElementById("productForm"),productsList=document.getElementById("productsList"),productIdInput=document.getElementById("productId"),photosInput=document.getElementById("photosInput"),photoPreview=document.getElementById("photoPreview"),existingImages=document.getElementById("existingImages"),cancelEditBtn=document.getElementById("cancelEditBtn"),importLegacyBtn=document.getElementById("importLegacyBtn");
+let products=[]; const labels={new:"New / Nuevo",in_progress:"In Progress / En progreso",completed:"Completed / Completado"};
+const esc=(v)=>String(v||"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+const money=(v)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number(v)||0);
+function getCookie(name){return document.cookie.split("; ").find(r=>r.startsWith(name+"="))?.split("=")[1]}
+function setWelcome(name){const n=decodeURIComponent(name||"Admin");welcomeTitle.textContent=`Welcome, ${n} / Bienvenido, ${n}`}
+function showDashboard(name){loginForm.style.display="none";dashboard.style.display="block";setWelcome(name);loadProducts();loadInquiries()}
+loginForm.addEventListener("submit",async e=>{e.preventDefault();const status=loginForm.querySelector(".form-status"),data=Object.fromEntries(new FormData(loginForm));const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});if(r.ok){const result=await r.json();showDashboard(result.name)}else status.textContent="Invalid login. / Acceso incorrecto."});
+logoutBtn.addEventListener("click",async()=>{await fetch("/api/admin/logout",{method:"POST"});location.reload()});
+document.querySelectorAll("[data-tab]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===btn));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));document.getElementById(btn.dataset.tab+"Panel").classList.add("active")}));
+photosInput.addEventListener("change",()=>{photoPreview.innerHTML="";[...photosInput.files].forEach(file=>{const img=document.createElement("img");img.src=URL.createObjectURL(file);photoPreview.appendChild(img)})});
+function resetProductForm(){productForm.reset();productForm.is_visible.checked=true;productIdInput.value="";photoPreview.innerHTML="";existingImages.innerHTML="";document.getElementById("productFormTitle").textContent="Add Product / Agregar Producto";cancelEditBtn.style.display="none"}
+cancelEditBtn.addEventListener("click",resetProductForm);
+function editProduct(id){const p=products.find(x=>x.id===id);if(!p)return;productIdInput.value=p.id;productForm.name.value=p.title;productForm.description.value=p.description||"";productForm.price.value=p.price;productForm.is_visible.checked=p.isVisible;document.getElementById("productFormTitle").textContent="Edit Product / Editar Producto";cancelEditBtn.style.display="inline-block";renderExistingImages(p);window.scrollTo({top:0,behavior:"smooth"})}
+function renderExistingImages(p){existingImages.innerHTML=(p.images||[]).map(url=>`<div class="existing-image"><img src="${esc(url)}"><button type="button" data-remove-image="${esc(url)}">×</button></div>`).join("");existingImages.querySelectorAll("[data-remove-image]").forEach(btn=>btn.addEventListener("click",async()=>{if(!confirm("Remove this photo? / ¿Eliminar esta foto?"))return;const r=await fetch(`/api/admin/products/${p.id}/images`,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({imageUrl:btn.dataset.removeImage})});if(r.ok){await loadProducts();editProduct(p.id)}}))}
+productForm.addEventListener("submit",async e=>{e.preventDefault();const status=productForm.querySelector(".form-status"),id=productIdInput.value,fd=new FormData(productForm);fd.set("is_visible",productForm.is_visible.checked?"true":"false");status.textContent="Saving... / Guardando...";const r=await fetch(id?`/api/admin/products/${id}`:"/api/admin/products",{method:id?"PATCH":"POST",body:fd});const result=await r.json().catch(()=>({}));if(!r.ok){status.textContent=result.error||"Could not save product.";return}status.textContent="Saved successfully. / Guardado correctamente.";resetProductForm();await loadProducts()});
+async function loadProducts(){const r=await fetch("/api/admin/products");if(!r.ok){productsList.innerHTML='<div class="admin-card empty">Supabase is not configured or the product tables are unavailable.</div>';return}products=await r.json();document.getElementById("productCount").textContent=products.length;document.getElementById("visibleCount").textContent=products.filter(p=>p.isVisible).length;document.getElementById("hiddenCount").textContent=products.filter(p=>!p.isVisible).length;if(!products.length){productsList.innerHTML='<div class="admin-card empty">No Supabase products yet. Use “Import Current Catalog” once or add a product manually.</div>';return}productsList.innerHTML=products.map(p=>`<article class="product-admin-card"><img src="${esc(p.image||"")}" alt=""><div class="product-admin-content"><div class="product-top"><span class="badge ${p.isVisible?"":"hidden"}">${p.isVisible?"Visible":"Hidden"}</span><strong>${money(p.price)}</strong></div><h3>${esc(p.title)}</h3><p>${esc((p.description||"").slice(0,130))}</p><div class="actions"><button data-edit="${p.id}">Edit</button><button class="secondary" data-toggle="${p.id}">${p.isVisible?"Hide":"Publish"}</button><button class="delete-btn" data-delete-product="${p.id}">Delete</button></div></div></article>`).join("");productsList.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>editProduct(b.dataset.edit)));productsList.querySelectorAll("[data-toggle]").forEach(b=>b.addEventListener("click",async()=>{const p=products.find(x=>x.id===b.dataset.toggle);const fd=new FormData();fd.set("is_visible",(!p.isVisible).toString());await fetch(`/api/admin/products/${p.id}`,{method:"PATCH",body:fd});loadProducts()}));productsList.querySelectorAll("[data-delete-product]").forEach(b=>b.addEventListener("click",async()=>{if(!confirm("Delete this product and its uploaded photos? / ¿Eliminar este producto y sus fotos?"))return;await fetch(`/api/admin/products/${b.dataset.deleteProduct}`,{method:"DELETE"});loadProducts()}))}
+importLegacyBtn.addEventListener("click",async()=>{if(!confirm("Import the entire current catalog into an empty Supabase table? Run this only once."))return;importLegacyBtn.disabled=true;importLegacyBtn.textContent="Importing...";const r=await fetch("/api/admin/products/import-legacy",{method:"POST"});const result=await r.json().catch(()=>({}));alert(r.ok?`${result.imported} products imported successfully.`:(result.error||"Import failed."));importLegacyBtn.disabled=false;importLegacyBtn.textContent="Import Current Catalog";loadProducts()});
+async function loadInquiries(){const div=document.getElementById("inquiries"),r=await fetch("/api/admin/inquiries");if(!r.ok)return;const items=await r.json();document.getElementById("newCount").textContent=items.filter(i=>i.status==="new").length;document.getElementById("progressCount").textContent=items.filter(i=>i.status==="in_progress").length;document.getElementById("totalCount").textContent=items.length;if(!items.length){div.innerHTML='<div class="admin-card empty"><h2>No active inquiries</h2></div>';return}div.innerHTML=items.map(i=>`<div class="inquiry"><div class="inquiry-top"><div><span class="status">${labels[i.status]||i.statusLabel}</span><h2>${esc(i.productTitle||"General Contact")}</h2><p class="meta">${new Date(i.createdAt).toLocaleString()}</p></div><label>Status<select data-id="${i.id}"><option value="new" ${i.status==="new"?"selected":""}>New</option><option value="in_progress" ${i.status==="in_progress"?"selected":""}>In Progress</option><option value="completed">Completed</option></select></label></div><p><strong>Name:</strong> ${esc(i.name)}</p><p><strong>Email:</strong> ${esc(i.email)}</p><p><strong>Phone:</strong> ${esc(i.phone)}</p><p><strong>Message:</strong><br>${esc(i.message)}</p><button class="delete-btn" data-delete="${i.id}">Delete</button></div>`).join("");div.querySelectorAll("select[data-id]").forEach(s=>s.addEventListener("change",async()=>{await fetch(`/api/admin/inquiries/${s.dataset.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:s.value})});loadInquiries()}));div.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",async()=>{if(confirm("Delete this inquiry?")){await fetch(`/api/admin/inquiries/${b.dataset.delete}`,{method:"DELETE"});loadInquiries()}}))}
+if(getCookie("floreria_admin_name"))showDashboard(getCookie("floreria_admin_name"));

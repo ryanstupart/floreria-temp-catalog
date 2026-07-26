@@ -111,3 +111,4 @@ footer{text-align:center;padding:40px;color:#7b706c}
 }
 
 .floating-whatsapp{position:fixed;right:22px;bottom:22px;width:64px;height:64px;border-radius:50%;background:#25D366;color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:9999}.floating-whatsapp:hover{transform:scale(1.08)}
+.product-thumbnails{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.product-thumbnails button{padding:3px;background:#fff;border:2px solid transparent;border-radius:12px}.product-thumbnails button.active{border-color:#b85c68}.product-thumbnails img{width:68px!important;height:68px!important;object-fit:cover;border-radius:8px}.catalog-loading{grid-column:1/-1;text-align:center;padding:32px;color:#6f625d}
