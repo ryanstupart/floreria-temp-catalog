@@ -537,7 +537,11 @@ app.post("/api/admin/products/import-legacy", requireAdmin, async (_req, res) =>
   }
 });
 
-app.post("/api/inquiries", async (req, res) => {
+app.post("/api/inquiries", async (_req, res) => {
+  return res.status(410).json({ error: "Online inquiry forms are currently disabled. Please call, email, or use WhatsApp." });
+});
+
+app.post("/api/inquiries-disabled", async (req, res) => {
   const { type, productId, productTitle, productImage, name, email, phone, message } = req.body;
 
   if (!name || !email || !message) {

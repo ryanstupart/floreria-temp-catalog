@@ -27,8 +27,8 @@
       <p class="eyebrow">Floral arrangements for every occasion / Arreglos florales para toda ocasión</p>
       <h1>Blooming Happiness, One Bouquet at a Time</h1>
       <h2>Floreciendo felicidad, un ramo a la vez</h2>
-      <p>Explore our floral catalog and send us an inquiry for the arrangement you love.</p>
-      <p class="spanish">Explore nuestro catálogo floral y envíenos una solicitud por el arreglo que le guste.</p>
+      <p>Explore our floral catalog and contact us directly for availability, custom orders, or assistance.</p>
+      <p class="spanish">Explore nuestro catálogo floral y contáctenos directamente para disponibilidad, pedidos personalizados o asistencia.</p>
       <a class="button" href="#catalog">View Catalog / Ver Catálogo</a>
     </div>
   </section>
@@ -49,8 +49,8 @@
       <div class="section-title">
         <p class="eyebrow">Catalog / Catálogo</p>
         <h2>Product Catalog</h2>
-        <p>Click any product to view details and submit an inquiry.</p>
-        <p class="spanish">Haga clic en cualquier producto para ver detalles y enviar una solicitud.</p>
+        <p>Click any product to view its details. To order or ask questions, contact us by phone, WhatsApp, or email.</p>
+        <p class="spanish">Haga clic en cualquier producto para ver sus detalles. Para ordenar o hacer preguntas, contáctenos por teléfono, WhatsApp o correo electrónico.</p>
       </div>
       <div id="productsGrid" class="products-grid"></div>
     </section>
@@ -88,17 +88,14 @@
           Sábado–domingo: 9:00 AM – 8:00 PM
         </p>
       </div>
-
-      <form id="contactForm" class="form-card">
-        <h3>Send a Message / Enviar Mensaje</h3>
-        <input type="hidden" name="type" value="contact" />
-        <label>Name / Nombre<input name="name" required /></label>
-        <label>Email / Correo<input name="email" type="email" required /></label>
-        <label>Phone / Teléfono<input name="phone" /></label>
-        <label>Message / Mensaje<textarea name="message" required></textarea></label>
-        <button type="submit">Send Message / Enviar Mensaje</button>
-        <p class="form-status"></p>
-      </form>
+      <div class="form-card contact-options-card">
+        <h3>Contact Us Directly / Contáctenos Directamente</h3>
+        <p>To reduce spam, our website contact and product inquiry forms are temporarily unavailable. Please contact us using one of the options below.</p>
+        <p class="spanish">Para reducir el correo no deseado, nuestros formularios de contacto y solicitudes de productos no están disponibles temporalmente. Comuníquese con nosotros usando una de las siguientes opciones.</p>
+        <a class="button" href="tel:+17708736614">📞 Call / Llamar: 770-873-6614</a>
+        <a class="button" target="_blank" rel="noopener noreferrer" href="https://wa.me/17708736614?text=Hello!%20I%27m%20interested%20in%20a%20flower%20arrangement.%20%2F%20Hola,%20me%20interesa%20un%20arreglo%20floral.">💬 WhatsApp</a>
+        <a class="button" href="mailto:floreriaflorentina4@gmail.com?subject=Floreria%20Florentina%20Inquiry&body=Hello%20Floreria%20Florentina,%0A%0AI%20would%20like%20more%20information%20about%20your%20flowers%20or%20a%20custom%20arrangement.%0A%0AName:%20%0APhone:%20%0AEvent%20Date:%20%0A%0AThank%20you!%0A%0AHola%20Floreria%20Florentina,%0A%0AMe%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20flores%20o%20un%20arreglo%20personalizado.%0A%0ANombre:%20%0ATel%C3%A9fono:%20%0AFecha%20del%20evento:%20">✉️ Email / Correo</a>
+      </div>
     </section>
   </main>
 
@@ -106,17 +103,6 @@
     <div class="modal-content">
       <button id="closeModal" class="close-button" aria-label="Close">×</button>
       <div id="modalBody"></div>
-    </div>
-  </div>
-
-
-  <div id="successPopup" class="success-popup" aria-hidden="true">
-    <div class="success-card">
-      <button id="successClose" class="success-close" aria-label="Close">×</button>
-      <div class="success-icon">✓</div>
-      <h2 id="successTitle">Message Sent Successfully / Mensaje enviado correctamente</h2>
-      <p id="successMessage">Thank you for contacting Floreria Florentina. Gracias por contactar a Floreria Florentina.</p>
-      <button type="button" onclick="closeSuccessPopup()">Close / Cerrar</button>
     </div>
   </div>
 
