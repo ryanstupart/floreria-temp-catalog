@@ -175,3 +175,62 @@ footer{background:#302139;color:#f4dccc}
 @keyframes halloween-float{50%{transform:translateY(-12px) rotate(8deg)}}
 @keyframes halloween-spark{to{opacity:0;transform:translateY(-36px) scale(1.6) rotate(20deg)}}
 @media(prefers-reduced-motion:reduce){.halloween-catalog::after{animation:none}.halloween-reveal{opacity:1;transform:none;transition:none}.halloween-spark{display:none}.halloween-catalog .product-card,.halloween-catalog .product-card img{transition:none}}
+
+/* 2026 Halloween full-site visual system — storefront only */
+:root{--h-night:#1d1529;--h-plum:#39233f;--h-violet:#6c385e;--h-orange:#e88d40;--h-gold:#f6c889;--h-paper:#f9e8d5}
+html{scroll-behavior:smooth}
+body{color:#f8eadd;background:var(--h-night)}
+main{background:radial-gradient(circle at 15% 18%,rgba(202,98,43,.16),transparent 25%),radial-gradient(circle at 90% 56%,rgba(129,68,117,.2),transparent 35%),linear-gradient(180deg,#281c35,#1d1529 65%,#30203b)}
+.site-header{background:#1a1325;color:#fce9d3;border-color:#ae6b3d}
+.logo{font-family:'Creepster',Georgia,serif;font-size:clamp(29px,3vw,40px);font-weight:400;letter-spacing:.035em;color:var(--h-gold)}
+nav a:hover{color:var(--h-orange)}
+.hero{min-height:85vh;background:linear-gradient(90deg,rgba(14,10,23,.94),rgba(42,18,47,.66) 58%,rgba(17,10,25,.89)),url("hero-background.jpg");background-size:cover;background-position:center}
+.hero-card{max-width:900px;background:rgba(23,13,33,.79);border:2px solid rgba(244,167,86,.67);box-shadow:0 0 90px rgba(229,109,40,.19),0 35px 95px #100a19}
+.hero h1{font-family:'Creepster',Georgia,serif;font-weight:400;letter-spacing:.018em;font-size:clamp(55px,8.5vw,105px);line-height:.98;color:#f8d7a4;text-shadow:3px 5px 0 #51283e,0 0 32px rgba(255,137,43,.3)}
+.hero h2{font-family:Georgia,serif;font-size:clamp(23px,3vw,37px);color:#fff0d9}
+.hero .eyebrow{color:#ffbe73}
+.hero p{color:#f9eadf}
+.hero .button{background:linear-gradient(110deg,#f3a34c,#d36b36);color:#201527;border:2px solid #f8c486;box-shadow:0 12px 30px rgba(237,126,40,.24)}
+.halloween-moon{position:absolute;z-index:0;top:9%;right:10%;width:clamp(115px,18vw,250px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe0a3 0%,#f5a34c 48%,#bd562d 90%);box-shadow:0 0 45px 18px rgba(239,119,44,.28),0 0 130px 50px rgba(231,111,41,.16);opacity:.86;animation:moon-breathe 7s ease-in-out infinite}
+.bat-flight{position:absolute;z-index:1;pointer-events:none;font-size:clamp(25px,4vw,50px);filter:brightness(0) drop-shadow(0 4px 3px #120e19);animation:bat-fly 16s linear infinite;left:-12%;top:22%}
+.bat-flight-two{top:34%;font-size:26px;animation-duration:21s;animation-delay:-9s;opacity:.65}
+@keyframes moon-breathe{50%{box-shadow:0 0 70px 24px rgba(239,119,44,.4),0 0 160px 70px rgba(231,111,41,.2)}}
+@keyframes bat-fly{0%{transform:translateX(0) translateY(5px) rotate(-8deg)}30%{transform:translateX(35vw) translateY(-32px) rotate(9deg)}65%{transform:translateX(75vw) translateY(18px) rotate(-7deg)}100%{transform:translateX(120vw) translateY(-45px) rotate(7deg)}}
+.section{color:#f3e6dd}
+.section h2,.halloween-custom h2,.halloween-about h2,.halloween-contact h2{font-family:'Creepster',Georgia,serif;font-weight:400;font-size:clamp(43px,5vw,70px);letter-spacing:.035em;color:#f2aa60;text-shadow:2px 3px #4e2947}
+.section .eyebrow{color:#f1bb78}
+.section p{line-height:1.75}
+.story-card,.form-card{background:linear-gradient(145deg,#37243f,#261b32);border:1px solid #a96b50;color:#f6e9df;box-shadow:0 20px 55px rgba(0,0,0,.26)}
+.story-card h3,.form-card h3{font-family:'Creepster',Georgia,serif;font-size:clamp(30px,3vw,44px);font-weight:400;color:#f1b471;margin:0 0 15px}
+.story-card a{color:#ffd18f}
+.halloween-custom .story-card{position:relative;overflow:hidden;border:2px solid #a96842;background:radial-gradient(circle at 90% 10%,rgba(229,115,51,.23),transparent 45%),linear-gradient(140deg,#38233e,#231a31)}
+.halloween-custom .story-card::before{content:"✦  ☾  ✦";display:block;color:#ec9d54;font-size:32px;letter-spacing:15px;margin-bottom:10px}
+.halloween-catalog{max-width:none;padding-left:max(24px,calc((100% - 1220px)/2));padding-right:max(24px,calc((100% - 1220px)/2));background:radial-gradient(circle at center top,rgba(229,115,51,.18),transparent 45%),#211729;border-block:1px solid rgba(238,160,83,.27)}
+.halloween-catalog .section-title h2{font-size:clamp(53px,7vw,94px);color:#f5ac61;text-shadow:3px 4px 0 #713452}
+.halloween-catalog .section-title .eyebrow{color:#ffd09a}
+.halloween-catalog .product-card{position:relative;background:linear-gradient(180deg,#3c2845,#261a31)!important;border:2px solid #aa6a45!important;border-radius:20px;color:#f8eadd;box-shadow:0 12px 35px rgba(0,0,0,.3);overflow:hidden}
+.halloween-catalog .product-card::before{content:"✦ ENCHANTED BLOOMS ✦";display:block;background:linear-gradient(90deg,#6e3554,#a95a39,#6e3554);color:#ffe6b6;text-align:center;padding:9px 4px;font-size:11px;font-weight:900;letter-spacing:.15em}
+.halloween-catalog .product-card::after{content:"🕸";position:absolute;top:39px;right:9px;font-size:28px;opacity:.55;pointer-events:none}
+.halloween-catalog .product-card:hover{box-shadow:0 20px 50px rgba(226,111,50,.26);border-color:#f4a65c!important}
+.halloween-catalog .product-card img{height:295px}
+.halloween-catalog .product-info{background:linear-gradient(180deg,#38253f,#261b30);padding:23px}
+.halloween-catalog .product-title{color:#f6b46e;font-size:clamp(29px,2.8vw,38px);line-height:1.1}
+.halloween-catalog .product-description{color:#e8d4d5}
+.halloween-catalog .product-price{display:inline-block;color:#ffe0a1;background:#65394c;border:1px solid #c78354;padding:7px 13px;border-radius:12px;font-size:22px}
+.halloween-about{padding-block:100px}
+.halloween-contact{padding-bottom:110px}
+.halloween-contact>div:first-child{padding:30px;border:1px solid #a96b50;border-radius:25px;background:rgba(47,29,55,.74)}
+.form-card label{color:#f5c58c}
+.form-card input,.form-card textarea{background:#f9ecdf;border:1px solid #c68b65;color:#2c1d32}
+.form-card button{background:linear-gradient(120deg,#e9944b,#ae4f42);color:#241528}
+.modal{background:rgba(12,8,20,.86)}
+.modal-content{background:#2a1d35;color:#f7e7db;border:2px solid #b77950;box-shadow:0 0 60px rgba(222,111,42,.18)}
+.modal-content h2,.modal-content h3{color:#f3b26d}
+.modal-content label{color:#f6cb99}
+.modal-content input,.modal-content textarea{background:#fff6ed;color:#281c31}
+.close-button{background:#f1a65d;color:#26182d}
+.success-card{background:#2a1c36;color:#f7e5d6;border-color:#c48a55}
+.success-card p{color:#ead6d0}
+footer{background:#140f1e;border-top:1px solid #a96946;color:#f5d6b3}
+@media(max-width:820px){.hero{min-height:80vh}.halloween-moon{right:-30px;top:5%;opacity:.53}.halloween-catalog{padding-inline:20px}.halloween-catalog .product-card img{height:280px}.halloween-about{padding-block:60px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.halloween-moon,.bat-flight{animation:none}.bat-flight{display:none}}
