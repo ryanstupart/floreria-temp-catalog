@@ -10,6 +10,17 @@ const { chromium } = require('playwright');
     fs.mkdirSync(path.join(process.cwd(),'artifacts'), { recursive:true });
     const page = await browser.newPage({ viewport:{width:1440,height:900}, deviceScaleFactor:1 });
     const errors = [];
+    // Jump immediately for screenshots: sitewide smooth-scrolling is intentional,
+    // but taking a screenshot mid-transition would capture the wrong section.
+    async function jumpTo(target, offset=0, currentPage=page) {
+      await currentPage.evaluate(({target, offset}) => {
+        const el=document.querySelector(target);
+        if (!el) throw new Error('Screenshot target missing: '+target);
+        const top=el.getBoundingClientRect().top+window.scrollY+offset-85;
+        window.scrollTo({top,behavior:'instant'});
+      }, {target,offset});
+      await currentPage.waitForTimeout(450);
+    }
     page.on('pageerror',e=>errors.push(e.message));
     await page.goto('http://127.0.0.1:3000/', {waitUntil:'domcontentloaded',timeout:30000});
     await page.locator('.product-card').first().waitFor({timeout:35000});
@@ -22,10 +33,12 @@ const { chromium } = require('playwright');
     const priceColor = await page.locator('.product-price').first().evaluate(el=>getComputedStyle(el).color);
     assert.ok(titleColor&&descriptionColor&&priceColor);
     await page.screenshot({path:'artifacts/thanksgiving-desktop.png',fullPage:false,animations:'disabled'});
-    await page.locator('.harvest-gratitude').scrollIntoViewIfNeeded();
+    await jumpTo('.harvest-gratitude');
     await page.screenshot({path:'artifacts/thanksgiving-gratitude.png',fullPage:false,animations:'disabled'});
-    await page.evaluate(() => document.getElementById('catalog').scrollIntoView({block:'start'}));
+    await jumpTo('#catalog');
     await page.screenshot({path:'artifacts/thanksgiving-catalog-desktop.png',fullPage:false,animations:'disabled'});
+    await jumpTo('#catalog',360);
+    await page.screenshot({path:'artifacts/thanksgiving-products-desktop.png',fullPage:false,animations:'disabled'});
     const initialText = await page.locator('#harvestGratitudeEnglish').innerText();
     await page.locator('#harvestNextNote').click();
     assert.notEqual(await page.locator('#harvestGratitudeEnglish').innerText(),initialText);
@@ -52,7 +65,7 @@ const { chromium } = require('playwright');
     await mobile.screenshot({path:'artifacts/thanksgiving-mobile.png',fullPage:false,animations:'disabled'});
     const heroButtonHeight = await mobile.locator('.hero-copy .button').evaluate(el=>el.getBoundingClientRect().height);
     assert.ok(heroButtonHeight<=56,'Mobile CTA text should stay on one line: '+heroButtonHeight);
-    await mobile.evaluate(() => document.getElementById('catalog').scrollIntoView({block:'start'}));
+    await jumpTo('#catalog',410,mobile);
     await mobile.screenshot({path:'artifacts/thanksgiving-catalog-mobile.png',fullPage:false,animations:'disabled'});
     const dimensions = await mobile.evaluate(()=>({body:document.documentElement.scrollWidth, viewport:window.innerWidth}));
     assert.ok(dimensions.body<=dimensions.viewport+3,'Mobile horizontal overflow: '+JSON.stringify(dimensions));
