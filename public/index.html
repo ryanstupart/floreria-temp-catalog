@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#7d3e2d" />
   <title>Floreria Florentina LLC | Floral Catalog</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -13,6 +14,7 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#catalog">Skip to catalog / Ir al catálogo</a>
   <div class="harvest-ribbon" aria-label="Thanksgiving seasonal greeting">🍁 <span>A Season of Gratitude &amp; Beautiful Blooms · Una temporada de gratitud y flores</span> 🌾</div>
   <header class="site-header">
     <a class="logo" href="/">Floreria Florentina</a>
@@ -28,12 +30,32 @@
     <span class="harvest-decor harvest-decor--left" aria-hidden="true">🍁</span>
     <span class="harvest-decor harvest-decor--right" aria-hidden="true">🌾</span>
     <div class="hero-card">
+      <div class="hero-copy">
       <p class="eyebrow">Floral arrangements for every occasion / Arreglos florales para toda ocasión</p>
       <h1>Gather in Gratitude. Bloom in Beauty.</h1>
       <h2>Flores para agradecer, compartir y celebrar</h2>
       <p>Celebrate Thanksgiving with flowers that bring warmth to every gathering, thoughtful gift, and cherished moment.</p>
       <p class="spanish">Celebre el Día de Acción de Gracias con flores llenas de calidez para compartir y agradecer.</p>
-      <a class="button" href="#catalog">Explore Autumn Blooms / Ver Flores de Otoño</a>
+      <a class="button" href="#catalog">Explore Autumn Blooms / Ver Flores de Otoño <span aria-hidden="true">↗</span></a>
+      <p class="harvest-hero-footnote">✦ Thoughtfully selected flowers for every season · Flores para cada ocasión</p>
+      </div>
+      <aside class="harvest-feature" aria-label="A note of gratitude / Una nota de gratitud">
+        <div class="harvest-feature-top"><span>FLORERÍA FLORENTINA</span><span>✦ 2026 ✦</span></div>
+        <div class="harvest-botanical" aria-hidden="true">
+          <i class="harvest-botanical-stem harvest-botanical-stem--a"></i>
+          <i class="harvest-botanical-stem harvest-botanical-stem--b"></i>
+          <i class="harvest-botanical-stem harvest-botanical-stem--c"></i>
+          <span class="harvest-botanical-flower harvest-botanical-flower--a">✿</span>
+          <span class="harvest-botanical-flower harvest-botanical-flower--b">✽</span>
+          <span class="harvest-botanical-flower harvest-botanical-flower--c">✺</span>
+          <span class="harvest-botanical-leaf harvest-botanical-leaf--a">❧</span>
+          <span class="harvest-botanical-leaf harvest-botanical-leaf--b">❧</span>
+        </div>
+        <p class="harvest-feature-month">N O V E M B E R</p>
+        <p class="harvest-feature-message">There is always something to be thankful for.</p>
+        <p class="harvest-feature-spanish">Siempre hay algo por lo cual agradecer.</p>
+        <span class="harvest-feature-signature">With gratitude, Florentina <span aria-hidden="true">♡</span></span>
+      </aside>
     </div>
   </section>
 
@@ -50,6 +72,26 @@
 </div>
 </section>
 
+<section class="harvest-gratitude" aria-labelledby="gratitudeTitle">
+  <div class="harvest-gratitude-leaf" aria-hidden="true">❦</div>
+  <div class="harvest-gratitude-copy">
+    <p class="eyebrow">✦ November Little Moments / Pequeños Momentos de Noviembre</p>
+    <h2 id="gratitudeTitle">A little gratitude blooms.</h2>
+    <p class="harvest-gratitude-intro">A thoughtful flower can say what words sometimes can't. Here's a little note to share with someone special.</p>
+    <p class="spanish">Una flor puede expresar lo que a veces las palabras no pueden. Comparta una pequeña nota de agradecimiento.</p>
+  </div>
+  <div class="harvest-gratitude-note">
+    <span class="harvest-gratitude-quote" aria-hidden="true">“</span>
+    <p id="harvestGratitudeEnglish" class="harvest-gratitude-english" aria-live="polite">Thank you for making ordinary days feel extraordinary.</p>
+    <p id="harvestGratitudeSpanish" class="harvest-gratitude-spanish">Gracias por hacer que los días ordinarios se sientan extraordinarios.</p>
+    <div class="harvest-gratitude-actions">
+      <button id="harvestNextNote" type="button" class="harvest-note-button">Another note / Otra nota <span aria-hidden="true">↻</span></button>
+      <button id="harvestCopyNote" type="button" class="harvest-copy-button">Copy / Copiar <span aria-hidden="true">⧉</span></button>
+    </div>
+    <span id="harvestCopyFeedback" class="harvest-copy-feedback" role="status" aria-live="polite"></span>
+  </div>
+</section>
+
 <section id="catalog" class="section harvest-catalog">
       <div class="section-title">
         <p class="eyebrow">✦ A Season of Thanks / Temporada de Gratitud ✦</p>
@@ -57,6 +99,14 @@
         <p>From warm autumn tones to timeless bouquets, find flowers worth gathering around.</p>
         <p class="spanish">De los tonos cálidos del otoño a los ramos clásicos, encuentre flores para compartir.</p>
       </div>
+      <div class="harvest-catalog-toolbar" role="search" aria-label="Search floral arrangements / Buscar arreglos florales">
+        <label class="harvest-search-label" for="harvestProductSearch"><span aria-hidden="true">⌕</span>
+          <input id="harvestProductSearch" type="search" autocomplete="off" placeholder="Search by flower or occasion / Buscar por flor u ocasión" aria-label="Search products by name or description / Buscar productos por nombre o descripción" />
+        </label>
+        <button id="harvestClearSearch" type="button" class="harvest-clear-search">Clear / Limpiar</button>
+        <output id="harvestResultCount" class="harvest-results" aria-live="polite" aria-atomic="true"></output>
+      </div>
+      <div id="harvestNoResults" class="harvest-no-results" hidden>No matches for your search. Try another flower or occasion. / No hay resultados. Pruebe otra flor u ocasión.</div>
       <div id="productsGrid" class="products-grid"></div>
     </section>
 
@@ -126,6 +176,7 @@
   </div>
 
   <footer>
+    <p class="harvest-footer-blessing">With gratitude, from our flower shop to your home. <span aria-hidden="true">✿</span> Con gratitud, de nuestra florería a su hogar.</p>
     <p>© 2026 Floreria Florentina LLC</p>
   </footer>
 
