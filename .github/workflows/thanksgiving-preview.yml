@@ -1,0 +1,45 @@
+name: Thanksgiving storefront preview QA
+on:
+  push:
+    branches:
+      - seasonal-thanksgiving-2026
+  workflow_dispatch:
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install application and browser test runner
+        run: |
+          npm ci
+          npm install --no-save playwright@1.56.1
+      - name: Start storefront
+        run: |
+          npm start > /tmp/florentina-preview.log 2>&1 &
+          echo $! > /tmp/florentina-server.pid
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/florentina-preview.log
+          exit 1
+      - name: Check Thanksgiving preview in Chromium
+        run: node tests/thanksgiving-browser.cjs
+      - name: Upload desktop and mobile screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thanksgiving-browser-previews
+          path: artifacts/*.png
+          if-no-files-found: ignore
+      - name: Print storefront logs on failure
+        if: failure()
+        run: cat /tmp/florentina-preview.log || true

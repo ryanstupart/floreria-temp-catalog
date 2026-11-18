@@ -1,0 +1,139 @@
+/* Florería Florentina — A Season of Gratitude | Thanksgiving storefront finish */
+:root{--harvest-oxblood:#683329;--harvest-terracotta:#a85e38;--harvest-cinnamon:#87492e;--harvest-champagne:#e9bd80;--harvest-paper:#fff7e9;--harvest-cream:#fffcf5;--harvest-fir:#5d6b4a;--harvest-espresso:#47332b}
+body{background:#fff8ef}
+::selection{background:#e1b379;color:#513326}
+.skip-link{position:fixed;z-index:1200;top:-100px;left:12px;background:#fff8e8;color:#582e20;border:2px solid #a85e38;border-radius:8px;padding:12px 18px;font-weight:800}
+.skip-link:focus{top:12px}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,.product-card:focus-visible{outline:3px solid #bd693a;outline-offset:3px}
+.site-header{padding-block:15px}
+.site-header .logo{letter-spacing:-.045em}
+.site-header nav a{position:relative;padding:8px 1px}
+.site-header nav a::after{content:'';position:absolute;bottom:1px;left:0;right:0;height:2px;background:#b77e4b;transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.site-header nav a:hover::after,.site-header nav a:focus-visible::after{transform:scaleX(1)}
+.harvest-ribbon{position:relative;box-shadow:inset 0 1px rgba(255,226,176,.35);font-family:'DM Sans',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.09em}
+.harvest-ribbon::before,.harvest-ribbon::after{content:'✦';color:#f4cb87;margin-inline:15px}
+.hero{min-height:760px;min-height:min(92vh,920px);padding:80px 30px 100px;background-image:linear-gradient(105deg,rgba(41,26,24,.89) 2%,rgba(71,40,27,.72) 53%,rgba(47,29,25,.6)),url('/hero-background.jpg');isolation:isolate}
+.hero::after{content:'';position:absolute;inset:auto -10% -30% -10%;height:60%;pointer-events:none;background:radial-gradient(ellipse at center,rgba(235,147,63,.11),transparent 65%)}
+.harvest-sun{z-index:-1;right:3%;top:10%;width:clamp(90px,15vw,220px);filter:blur(.3px)}
+.hero-card{width:100%;max-width:1260px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(290px,.8fr);align-items:center;gap:clamp(24px,4vw,76px);padding:clamp(30px,5vw,65px);border-radius:30px;background:linear-gradient(110deg,rgba(63,40,30,.88),rgba(77,48,34,.77));border:1px solid rgba(245,206,152,.72);text-align:left;box-shadow:0 32px 95px rgba(25,15,14,.42),inset 0 0 0 8px rgba(255,239,206,.035)}
+.hero-card::before{content:'';position:absolute;inset:13px;border:1px solid rgba(242,197,134,.14);border-radius:22px;pointer-events:none}
+.hero-copy{position:relative;z-index:2;min-width:0}
+.hero-copy .eyebrow{color:#f8d49e;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-top:0}
+.hero-copy h1{max-width:720px;font-size:clamp(48px,5.8vw,86px);letter-spacing:-.045em;margin:15px 0 23px;line-height:1.05;font-weight:600}
+.hero-copy h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,2.1vw,32px);line-height:1.25;font-weight:500;margin:0 0 26px;max-width:660px}
+.hero-copy>p:not(.eyebrow){font-size:clamp(15px,1.4vw,19px);line-height:1.75;max-width:630px}
+.hero-copy p.spanish{font-size:clamp(14px,1.25vw,17px);opacity:.91;color:#f9e0c4}
+.hero-copy .button{margin-top:12px;border-radius:10px;padding:17px 22px;font-size:14px;font-weight:800;letter-spacing:.02em}
+.hero-copy .button span{margin-left:12px}
+.hero-copy .harvest-hero-footnote{font-size:12px!important;line-height:1.5!important;opacity:.8;margin:22px 0 0;max-width:490px}
+.harvest-decor--left{left:1%;bottom:5%;font-size:42px;animation:harvest-corner-breathe 8s ease-in-out infinite}
+.harvest-decor--right{right:1.5%;bottom:5%;font-size:38px;animation:harvest-corner-breathe 9s ease-in-out infinite reverse}
+@keyframes harvest-corner-breathe{50%{transform:rotate(8deg) translateY(-9px)}}
+.harvest-feature{position:relative;z-index:2;min-height:445px;padding:25px 25px 30px;background:radial-gradient(circle at 20% 5%,rgba(255,255,255,.9),transparent 48%),linear-gradient(140deg,#fdf3db,#f1dbb6);border:2px solid #c99d67;outline:1px solid rgba(92,60,37,.4);outline-offset:-11px;border-radius:4px;color:#6f3d29;box-shadow:0 17px 35px rgba(33,22,16,.32),0 0 0 8px rgba(243,218,176,.08);transform:rotate(1.7deg);text-align:center}
+.harvest-feature::after{content:'✦';position:absolute;bottom:11px;right:14px;color:#af794a;font-size:23px}
+.harvest-feature-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#8e5c40;font-size:9px;font-weight:800;letter-spacing:.11em;text-align:left}
+.harvest-feature-top span:last-child{white-space:nowrap;color:#ba8b5e}
+.harvest-botanical{position:relative;height:152px;width:180px;max-width:100%;margin:14px auto 0}
+.harvest-botanical-stem{position:absolute;left:49%;bottom:2px;width:3px;height:112px;background:#777d53;border-radius:8px;transform-origin:bottom}
+.harvest-botanical-stem--a{transform:rotate(-37deg)}.harvest-botanical-stem--b{transform:rotate(4deg);height:132px}.harvest-botanical-stem--c{transform:rotate(37deg);height:115px}
+.harvest-botanical-flower{position:absolute;color:#bd623a;text-shadow:0 2px 2px #ebcd9b;font-family:Georgia,serif;line-height:1}
+.harvest-botanical-flower--a{top:17px;left:7%;font-size:70px;color:#b86b4a}.harvest-botanical-flower--b{top:0;left:31%;font-size:79px;color:#e0a64c}.harvest-botanical-flower--c{top:22px;right:1%;font-size:66px;color:#9d593f}
+.harvest-botanical-leaf{position:absolute;color:#66774e;line-height:1;font-size:51px}
+.harvest-botanical-leaf--a{bottom:19px;left:18%;transform:rotate(-27deg)}.harvest-botanical-leaf--b{bottom:20px;right:15%;transform:scaleX(-1) rotate(-17deg)}
+.harvest-feature-month{font-size:12px!important;letter-spacing:.4em!important;font-weight:800;color:#8f653e!important;margin:4px 0 8px!important;line-height:1.4!important}
+.harvest-feature-message{font-family:'Playfair Display',Georgia,serif;font-size:clamp(23px,2.5vw,31px)!important;color:#763a29!important;line-height:1.24!important;margin:0 0 12px!important;font-weight:600}
+.harvest-feature-spanish{color:#8d5739!important;font-size:14px!important;line-height:1.5!important;margin:0 0 15px!important}
+.harvest-feature-signature{border-top:1px solid #d9b78e;padding-top:12px;display:block;color:#8d5639;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:17px}
+.harvest-feature-signature span{color:#aa633e}
+.harvest-garland{position:relative;height:49px;background:linear-gradient(90deg,#edd4ad,#fbebcf 30%,#edd4ad 85%);border-block:2px solid #c79b63}
+.harvest-garland::after{content:'✦   ❧   ✧   ❦   ✦   ❧   ✧   ❦   ✦   ❧   ✧';line-height:44px;font-size:24px;color:#a76c46;letter-spacing:19px}
+.harvest-custom{position:relative;max-width:1160px;padding-top:78px!important;padding-bottom:76px}
+.harvest-custom .story-card{position:relative;overflow:hidden;max-width:1100px!important;background:radial-gradient(circle at 0% 100%,rgba(143,118,77,.07),transparent 30%),radial-gradient(circle at 100% 0%,rgba(191,103,52,.10),transparent 30%),#fffaf0;border:1px solid #d4ad7e;border-radius:24px;padding:clamp(26px,5vw,56px)!important;box-shadow:0 18px 47px rgba(101,62,38,.12)}
+.harvest-custom .story-card::after{content:'❦';position:absolute;top:9px;right:22px;font-size:53px;color:rgba(160,97,62,.14)}
+.harvest-custom .story-card>p{max-width:880px;margin-inline:auto;font-size:16px;line-height:1.8}
+.harvest-custom .story-card h2{font-size:clamp(32px,4vw,51px);margin-bottom:22px}
+.harvest-custom .story-card p a{color:#844b30;text-decoration-thickness:2px;text-underline-offset:3px}
+.harvest-gratitude{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);align-items:center;gap:clamp(35px,6vw,90px);max-width:1160px;margin:0 auto 94px;padding:clamp(30px,5vw,62px);background:linear-gradient(125deg,#673b30,#7a493a 56%,#5c3d31);border:1px solid #be9365;border-radius:27px;box-shadow:0 25px 50px rgba(77,43,26,.18);color:#fff1df;overflow:hidden}
+.harvest-gratitude::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 100% 0,rgba(248,215,160,.15),transparent 45%);pointer-events:none}
+.harvest-gratitude-leaf{position:absolute;left:-18px;bottom:-77px;color:rgba(255,220,167,.13);font-family:Georgia,serif;font-size:330px;line-height:1;pointer-events:none}
+.harvest-gratitude-copy,.harvest-gratitude-note{position:relative;z-index:1}
+.harvest-gratitude .eyebrow{color:#f6d19a;font-size:11px}
+.harvest-gratitude h2{font-family:'Playfair Display',Georgia,serif;color:#ffe9c2;line-height:1.12;font-size:clamp(39px,4.8vw,62px);margin:16px 0 24px}
+.harvest-gratitude-copy>p:not(.eyebrow){color:#f9e8d3;font-size:16px;line-height:1.8}
+.harvest-gratitude-copy p.spanish{opacity:.84}
+.harvest-gratitude-note{background:#fff7e7;color:#694331;border:1px solid #e4c291;border-radius:7px;padding:clamp(26px,4vw,48px);box-shadow:10px 12px 0 rgba(43,27,24,.18);transform:rotate(-1deg);min-height:285px}
+.harvest-gratitude-quote{font-family:Georgia,serif;position:absolute;top:-6px;left:19px;font-size:82px;color:#dcb27b;line-height:1}
+.harvest-gratitude-english{position:relative;font-family:'Playfair Display',Georgia,serif;color:#6c3b2a!important;font-size:clamp(24px,2.6vw,33px)!important;font-weight:600;line-height:1.25!important;margin:30px 0 16px!important}
+.harvest-gratitude-spanish{color:#8a644b!important;font-size:15px!important;line-height:1.7!important;margin:0 0 22px!important}
+.harvest-gratitude-actions{display:flex;gap:10px;flex-wrap:wrap}
+.harvest-gratitude-actions button{position:relative;overflow:visible;border-radius:9px;font-size:12px;padding:12px 14px;transition:transform .2s ease}
+.harvest-gratitude-actions button:hover{transform:translateY(-2px)}
+.harvest-note-button{background:#8e5339;border:1px solid #8e5339;color:#fffaf2}
+.harvest-copy-button{background:#f4e5d1;border:1px solid #c7a077;color:#6c432f}
+.harvest-copy-feedback{font-size:12px;color:#7e5034;display:block;min-height:20px;margin-top:11px}
+.harvest-note-petal{position:absolute;z-index:4;top:0;left:50%;font-size:20px;color:#f2c47c;pointer-events:none;animation:harvest-petal-burst .85s ease-out forwards}
+@keyframes harvest-petal-burst{to{transform:translate(var(--petal-x),var(--petal-y)) rotate(90deg);opacity:0}}
+.harvest-catalog{position:relative;border-top:4px solid #cd9d66;padding-top:90px;padding-bottom:110px;background:radial-gradient(circle at 3% 2%,rgba(255,251,233,.9),transparent 30%),radial-gradient(circle at 98% 95%,rgba(190,118,58,.15),transparent 25%),linear-gradient(180deg,#f1debf,#fbf0dc 44%,#ecd6b7)}
+.harvest-catalog>.section-title{max-width:930px;margin-bottom:36px}
+.harvest-catalog .section-title h2{font-weight:600;letter-spacing:-.04em;margin:15px 0 18px}
+.harvest-catalog .section-title .eyebrow{letter-spacing:.18em}
+.harvest-catalog .section-title>p:not(.eyebrow){font-size:17px;line-height:1.65;margin:8px auto}
+.harvest-catalog-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 auto 28px;max-width:1200px;padding:14px;background:rgba(255,251,243,.86);border:1px solid #d8b588;border-radius:19px;box-shadow:0 6px 25px rgba(90,50,24,.07)}
+.harvest-search-label{display:flex;flex:1;align-items:center;gap:8px;min-width:230px;background:#fffefa;border:1px solid #c9a178;color:#805036;border-radius:12px;padding:0 15px;font-weight:400}
+.harvest-search-label span{font-size:26px;line-height:1}
+.harvest-search-label input{flex:1;width:100%;margin:0;padding:15px 0;border:0;outline:0!important;background:transparent;box-shadow:none;color:#442e23;min-width:0;font-size:14px}
+.harvest-search-label:focus-within{outline:3px solid rgba(187,111,61,.27);border-color:#a8643d}
+.harvest-search-label input::placeholder{color:#846e60;opacity:1}
+.harvest-clear-search{padding:14px 17px;border-radius:11px;background:#8b4c35;color:#fff8ed;font-weight:700;font-size:12px}
+.harvest-clear-search:disabled{opacity:.45;cursor:default}
+.harvest-results{font-size:12px;color:#775438;font-weight:800;min-width:154px;text-align:right}
+.harvest-no-results{margin:0 auto 30px;max-width:700px;padding:22px;text-align:center;background:#fff8ea;border:1px dashed #b48459;border-radius:14px;color:#704b32;font-weight:700}
+.harvest-catalog .product-card[hidden]{display:none!important}
+.harvest-catalog .products-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,265px),1fr));gap:23px;align-items:stretch}
+.harvest-catalog .product-card{background:#fffbf3;border:1px solid #cba477;border-radius:17px;overflow:hidden;box-shadow:0 9px 18px rgba(101,63,42,.11),0 16px 31px rgba(101,63,42,.07);transition:transform .3s ease,box-shadow .3s ease}
+.harvest-catalog .product-card::before{content:'FLORENTINA  ✦  FLORES CON CARIÑO';background:linear-gradient(90deg,#763f30,#985a3c,#763f30);font-size:10px;font-weight:800;padding:10px;letter-spacing:.14em}
+.harvest-catalog .product-card:hover,.harvest-catalog .product-card:focus-visible{transform:translateY(-7px);box-shadow:0 19px 37px rgba(108,58,32,.23)}
+.harvest-catalog .product-card img{height:265px;width:100%;object-fit:cover;display:block;border-bottom:1px solid #d7b792}
+.harvest-catalog .product-info{padding:23px;min-height:228px;display:flex;flex-direction:column;gap:11px}
+.harvest-catalog .product-title{font-family:'Playfair Display',Georgia,serif;color:#7b3d2d;font-size:clamp(24px,2.3vw,29px);font-weight:700;line-height:1.18;margin:0;padding-bottom:12px;border-bottom:1px solid #ead2b3}
+.harvest-catalog .product-description{color:#5e483b;font-size:14px;line-height:1.65;flex:1}
+.harvest-catalog .product-price{font-family:'DM Sans',sans-serif;display:inline-flex;background:#784731;color:#fff8e9;font-size:23px;font-weight:800;letter-spacing:.005em;margin-top:5px;padding:8px 14px;border:1px solid #a9794d;border-radius:10px}
+.harvest-about,.harvest-contact{gap:40px}
+.harvest-about h2,.harvest-contact h2{letter-spacing:-.035em}
+.harvest-about>div:first-child>p:not(.eyebrow),.harvest-contact>div:first-child>p{font-size:16px;line-height:1.8}
+.harvest-about .story-card{background:linear-gradient(150deg,#fffaf2,#fcf0de);border-left:5px solid #ac7049}
+.harvest-about .story-card h3{font-size:clamp(30px,3vw,40px)}
+.harvest-contact>div:first-child{background:linear-gradient(150deg,#fffaef,#f7ead6);border-radius:24px;padding:35px}
+.harvest-contact .form-card,.product-detail .form-card{background:linear-gradient(145deg,#fffcf4,#faeddb);border:1px solid #cfaa7e}
+.harvest-contact .form-card h3,.product-detail .form-card h3{font-family:'Playfair Display',Georgia,serif;color:#814528}
+.harvest-contact .form-card button,.product-detail .product-contact-options .button{background:linear-gradient(115deg,#915339,#aa6d42);color:#fff7e7;border:1px solid #c08b54}
+.product-detail h2{line-height:1.15;letter-spacing:-.02em}
+.product-detail .product-price{background:#85513a;color:#fff9eb;border:1px solid #ab7c51}
+.product-detail .product-contact-options{margin-top:20px;display:flex;flex-direction:column;gap:11px;padding:20px}
+.product-detail .product-contact-options h3{font-size:clamp(23px,2.4vw,30px);margin:0}
+.product-detail .product-contact-options p{margin:0;color:#5f493a}
+.product-detail .product-contact-options .button{display:block;text-align:center;border-radius:10px;text-decoration:none;padding:13px 18px}
+.product-detail .product-contact-options .button:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.modal-content{border:2px solid #c49b6d}
+.success-card{border:2px solid #d2ae83}
+.success-icon{background:#627351}
+.success-close{color:#884a30;background:#f3dfc5}
+.harvest-footer-blessing{font-family:'Playfair Display',Georgia,serif;font-size:clamp(17px,2vw,22px);color:#ffe0ad;margin-bottom:18px}
+footer p:last-child{font-size:13px;opacity:.85}
+.harvest-scroll-progress{position:fixed;z-index:1100;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#f0c784,#b65e3b,#f0c784);transform:scaleX(0);transform-origin:left;pointer-events:none;box-shadow:0 2px 8px rgba(125,53,25,.3)}
+.harvest-ambient-toggle{font-weight:800;letter-spacing:.01em;border:1px solid #ecd0a2;box-shadow:0 9px 25px rgba(62,37,22,.22);z-index:300}
+@media(min-width:1350px){.harvest-catalog .products-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1020px){.hero-card{gap:24px;padding:34px}.hero-copy h1{font-size:clamp(41px,5vw,65px)}.harvest-feature{min-height:380px;padding:20px}.harvest-botanical{height:130px;transform:scale(.86);margin:2px auto -4px}.harvest-feature-message{font-size:25px!important}.harvest-gratitude{margin-inline:20px}}
+@media(max-width:820px){.hero{padding:65px 20px 70px;min-height:auto}.hero-card{grid-template-columns:1fr;text-align:center;padding:30px 24px;max-width:700px}.hero-copy h1{margin-inline:auto;max-width:580px;font-size:clamp(45px,8vw,70px)}.hero-copy h2{margin-inline:auto}.hero-copy>p:not(.eyebrow){margin-inline:auto}.harvest-feature{width:min(440px,100%);justify-self:center;min-height:380px}.harvest-decor{font-size:28px}.harvest-gratitude{grid-template-columns:1fr;gap:35px;margin:0 20px 70px;padding:30px}.harvest-gratitude h2{font-size:clamp(38px,7vw,54px)}.harvest-catalog{padding-top:65px;padding-bottom:65px}.harvest-results{text-align:left;min-width:auto}.harvest-search-label{min-width:min(100%,250px)}.harvest-about,.harvest-contact{gap:24px}}
+@media(max-width:520px){.harvest-ribbon{font-size:10px;line-height:1.55;padding:10px 6px;letter-spacing:.035em}.harvest-ribbon::before,.harvest-ribbon::after{display:none}.site-header{padding:14px}.site-header nav{gap:12px}.site-header nav a{font-size:12px}.hero{padding:52px 13px 55px}.hero-card{padding:28px 18px}.hero-card::before{inset:8px}.hero-copy h1{font-size:clamp(41px,11vw,62px)}.hero-copy .eyebrow{font-size:10px}.hero-copy .button{display:inline-block;font-size:12px;padding:14px}.harvest-feature{transform:rotate(.6deg);min-height:375px}.harvest-garland::after{font-size:20px;letter-spacing:10px}.harvest-custom{padding:48px 16px!important}.harvest-custom .story-card{padding:27px 18px!important}.harvest-gratitude{margin-inline:13px;padding:26px 19px}.harvest-gratitude-note{padding:28px 22px}.harvest-gratitude-english{font-size:25px!important}.harvest-catalog-toolbar{gap:9px;padding:12px}.harvest-search-label{min-width:100%;flex:1 1 100%}.harvest-clear-search{padding:11px 14px}.harvest-catalog .product-card img{height:255px}.harvest-catalog .product-info{min-height:0}.harvest-about,.harvest-contact{padding-block:45px}.harvest-about .story-card,.harvest-contact .form-card{padding:23px}.harvest-ambient-toggle{bottom:15px;left:12px;padding:9px 11px;font-size:11px}.floating-whatsapp{width:52px;height:52px;font-size:25px;right:13px;bottom:13px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.harvest-feature,.harvest-gratitude-note{transform:none}.harvest-decor{animation:none}.harvest-note-petal,.harvest-scroll-progress{display:none}.harvest-reveal{opacity:1;transform:none;transition:none}.harvest-catalog .product-card,.harvest-catalog .product-card img,.harvest-gratitude-actions button,.hero-copy .button{transition:none}}
+
+/* Compact bilingual hero action — keeps the icon on the same line */
+.hero-copy .button .harvest-cta-desktop,.hero-copy .button .harvest-cta-mobile{margin-left:0}
+.hero-copy .button .harvest-cta-mobile{display:none}
+.hero-copy .button .harvest-cta-arrow{display:inline-block;margin-left:10px;white-space:nowrap}
+@media(max-width:520px){
+ .hero-copy .button .harvest-cta-desktop{display:none}
+ .hero-copy .button .harvest-cta-mobile{display:inline}
+ .hero-copy .button{max-width:100%;white-space:nowrap;font-size:13px;padding:14px 19px}
+}
