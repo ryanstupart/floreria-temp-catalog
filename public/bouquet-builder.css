@@ -28,3 +28,45 @@ footer{background:#553b43;color:#f6e7e6}.footer-inner{max-width:1500px;margin:au
 @media(max-width:660px){.header-inner{padding:13px 16px}.brand{font-size:22px}.brand-mark{font-size:31px}.brand small{font-size:7px}.site-header nav{gap:12px}.site-header nav a{font-size:10px}.site-header nav a:last-child{display:none}.intro{padding:35px 10px 29px}.intro h1{font-size:clamp(37px,9vw,54px)}.intro-sub{font-size:16px;line-height:1.45}.studio-grid{gap:13px;padding-bottom:34px}.editor-panel{display:block}.editor-group:nth-of-type(odd){border-right:0}.editor-header{padding:22px 20px 17px}.editor-group{padding:19px 20px 24px}.editor-group legend{padding:17px 0 0}.base-card{margin:3px 20px 8px}.studio-shell{padding-inline:12px}.bouquet-canvas{min-height:440px}.canvas-caption{margin-top:-10px}.canvas-caption strong{font-size:21px}.preview-note{font-size:9px}.visual-bar{padding:13px;gap:8px}.visual-actions button{font-size:9px;padding:8px 9px}#bouquetArt{max-height:470px}.summary-panel{padding:25px 22px}.how-section{margin:12px 0 50px;padding:27px 23px;gap:15px}.how-flower{font-size:53px}.footer-inner{justify-content:center;text-align:center;padding:24px 15px}}
 @media(max-width:390px){.studio-shell{padding-inline:9px}.rose-quantity{flex-wrap:wrap}.rose-quantity>div:first-child{flex:1}.editor-group{padding-inline:15px}.option-row,.wrap-grid{gap:5px}.swatch-option>span:last-child,.wrap-choice strong{font-size:9px}.addon-card{gap:7px}.addon-art{height:36px;width:32px;font-size:28px}.addon-copy strong{font-size:11px}.addon-copy small{font-size:9px}.demo-banner{font-size:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Photo-composited bouquet atelier v2: 200 roses, rich palette, personalized ribbons */
+.option-row{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.swatch-option{padding:12px 3px 10px;gap:5px}
+.swatch{width:37px;height:37px;background:var(--swatch) center/cover no-repeat}
+.swatch-option[data-rose="rose"] .swatch{background-image:url('/assets/bouquet/rose-ruby.webp')}
+.swatch-option[data-rose="blush"] .swatch{background-image:url('/assets/bouquet/rose-blush.webp')}
+.swatch-option[data-rose="ivory"] .swatch{background-image:url('/assets/bouquet/rose-ivory.webp')}
+.swatch-option[data-rose="sunset"] .swatch{background-image:url('/assets/bouquet/rose-sunset.webp')}
+.swatch-option[data-rose="yellow"] .swatch{background-image:url('/assets/bouquet/rose-yellow.webp')}
+.swatch-option[data-rose="lavender"] .swatch{background-image:url('/assets/bouquet/rose-lavender.webp')}
+.swatch-option[data-rose="fuchsia"] .swatch{background-image:url('/assets/bouquet/rose-fuchsia.webp')}
+.swatch-option[data-rose="blue"] .swatch{background-image:url('/assets/bouquet/rose-blue.webp')}
+.swatch-option[data-rose="black"] .swatch{background-image:url('/assets/bouquet/rose-black.webp')}
+.swatch-option[data-rose="mixed"] .swatch{background:conic-gradient(#b33a56 0 55deg,#eab4bb 55deg 115deg,#f3e6cb 115deg 185deg,#e7b237 185deg 250deg,#9b71a8 250deg 315deg,#c95c3a 315deg)}
+.control-footnote{font-size:10px;line-height:1.55;margin:14px 0 0;color:#967f81}
+.rose-bulk-controls{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding:11px 12px;background:#fffafa;border:1px solid #eedddc;border-radius:10px}
+.rose-bulk-controls label{font-size:11px;font-weight:700;flex:1;color:#684e54}
+.rose-bulk-controls input{width:80px;min-height:35px;text-align:center;border:1px solid #d7b7bd;border-radius:8px;background:#fff;color:#66404c;font-size:16px;font-weight:800}
+.rose-bulk-controls span{font-size:10px;color:#917a7c;font-weight:800}
+.rose-presets{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:21px}
+.rose-presets>span{font-size:9px;color:#a88b8c;letter-spacing:.055em;font-weight:800;margin-right:4px}
+.rose-presets button{background:#fff8f7;border:1px solid #e7d0d2;color:#855663;padding:7px 10px;border-radius:8px;min-height:32px;font-size:10px;font-weight:800}
+.rose-presets button:hover,.rose-presets button:focus-visible{background:#f6e8eb;border-color:#b97583}
+.ribbon-personalization{margin-top:15px;padding:18px 16px;background:#fdf6f5;border:1px solid #ead7d8;border-radius:13px;display:grid;gap:9px}
+.ribbon-personalization>label{font-size:12px;color:#67434e;font-weight:800}
+.ribbon-personalization>label small{display:block;font-size:10px;color:#947b7c;font-weight:500;margin-top:3px}
+.ribbon-input-line{display:flex;align-items:center;gap:9px}
+.ribbon-input-line input,.ribbon-personalization select{flex:1;min-width:0;background:white;border:1px solid #e1c9cc;color:#543a42;border-radius:9px;padding:11px;line-height:1.4;font-size:12px}
+.ribbon-input-line output{font-size:11px;color:#a7737f;font-weight:800;white-space:nowrap}
+.ribbon-tip{font-size:10px;line-height:1.6;color:#957d80}
+.ribbon-personalization input:disabled,.ribbon-personalization select:disabled{opacity:.47;cursor:not-allowed;background:#f4efee}
+.ribbon-personalization:has(input:not(:disabled)){border-color:#c98f9f;box-shadow:0 0 0 1px #ebc3c9 inset}
+.visual-bar .live-indicator{font-size:9px;letter-spacing:.07em}
+#bouquetArt .photo-rose{transition:opacity .12s}
+.canvas-caption strong{font-family:'Playfair Display',Georgia,serif}
+.preview-note{max-width:93%;line-height:1.6;font-size:10px}
+@media(max-width:1300px){.option-row{grid-template-columns:repeat(5,minmax(0,1fr))}.swatch{width:33px;height:33px}.swatch-option>span:last-child{font-size:9px}}
+@media(max-width:900px){.option-row{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.swatch{width:41px;height:41px}.rose-bulk-controls{justify-content:space-between}}
+@media(max-width:660px){.option-row{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.swatch{width:32px;height:32px}.swatch-option>span:last-child{font-size:9px}.rose-bulk-controls{flex-wrap:wrap}.rose-presets button{padding:8px 11px}.visual-bar .live-indicator{font-size:8px}.preview-note{font-size:9px}}
+@media(max-width:390px){.option-row{gap:4px}.swatch{width:27px;height:27px}.swatch-option small{font-size:8px}.rose-presets>span{flex-basis:100%}.ribbon-input-line{gap:6px}.ribbon-input-line input{padding:9px}.ribbon-input-line output{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#bouquetArt .photo-rose{transition:none}}
