@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#502d32">
+<meta name="description" content="Design a custom floral bouquet in Florería Florentina's interactive studio. Preview roses, greenery, wraps and accessories with an instant sample price.">
+<title>Bouquet Atelier — Create Your Own Bouquet | Florería Florentina</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/bouquet-builder.css">
+<script src="/bouquet-builder.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#builder">Skip to builder / Ir al diseñador</a>
+<div class="demo-banner"><span class="demo-dot"></span><strong>DEVELOPMENT PREVIEW</strong><span>Sample prices only · Nothing is sent automatically / Solo precios de prueba</span></div>
+<header class="site-header">
+ <div class="header-inner"><a class="brand" href="/" aria-label="Florería Florentina home"><span class="brand-mark">✿</span><span>Florería <em>Florentina</em><small>FLORAL STUDIO · CHAMBLEE, GA</small></span></a>
+ <nav aria-label="Main navigation"><a href="/">← Back to the shop</a><a href="/#catalog">Catalog / Catálogo</a></nav></div>
+</header>
+<main id="builder" class="studio-shell">
+ <div class="intro"><p class="kicker"><span class="kicker-stroke"></span> THE FLORAL ATELIER <span class="kicker-stroke"></span></p><h1>Make it <em>uniquely yours.</em></h1><p class="intro-sub">Every bouquet tells a story. Choose each detail and watch yours bloom.</p><p class="intro-es">Diseña tu ramo a tu gusto y mira cómo florece.</p></div>
+ <div class="studio-grid">
+  <section class="editor-panel" aria-labelledby="editorTitle">
+   <div class="editor-header"><div><p class="eyebrow">01 / MAKE IT YOURS</p><h2 id="editorTitle">The finishing touches</h2></div><span class="editor-icon" aria-hidden="true">✿</span></div>
+   <div class="base-card"><span class="base-icon" aria-hidden="true">✦</span><div><strong>Your starting bouquet</strong><small>6 roses · standard greens · kraft wrap</small></div><strong class="base-cost">$60</strong></div>
+   <fieldset class="editor-group">
+    <legend><span class="step-number">01</span> Your roses <small>Elige tus rosas</small></legend>
+    <div class="rose-quantity"><div><strong>Rose stems</strong><small>6 included · +$5 each additional stem</small></div><div class="quantity-actions"><button type="button" id="roseMinus" aria-label="Remove rose">−</button><output id="roseCount" aria-live="polite">6</output><button type="button" id="rosePlus" aria-label="Add rose">+</button></div></div>
+    <p class="control-hint">Choose their color / Elige su color</p>
+    <div class="option-row" id="roseColors" role="group" aria-label="Rose colors">
+      <button type="button" class="swatch-option active" data-rose="rose" aria-pressed="true"><span class="swatch" style="--swatch:#bb4e62"></span><span>Ruby<small>Rojo</small></span></button>
+      <button type="button" class="swatch-option" data-rose="blush" aria-pressed="false"><span class="swatch" style="--swatch:#e8a9a0"></span><span>Blush<small>Rosa</small></span></button>
+      <button type="button" class="swatch-option" data-rose="ivory" aria-pressed="false"><span class="swatch" style="--swatch:#f3e8d0"></span><span>Ivory<small>Marfil</small></span></button>
+      <button type="button" class="swatch-option" data-rose="sunset" aria-pressed="false"><span class="swatch" style="--swatch:#d7894f"></span><span>Sunset<small>Naranja</small></span></button>
+    </div>
+   </fieldset>
+   <fieldset class="editor-group">
+    <legend><span class="step-number">02</span> Fillers & greenery <small>Relleno y follaje</small></legend>
+    <div class="addon-list">
+      <button type="button" class="addon-card" data-addon="baby" aria-pressed="false"><span class="addon-art" aria-hidden="true">✧</span><span class="addon-copy"><strong>Baby’s breath</strong><small>Nube de flores · Ramillete</small></span><span class="addon-price">+$12</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="eucalyptus" aria-pressed="false"><span class="addon-art sage-art" aria-hidden="true">❧</span><span class="addon-copy"><strong>Eucalyptus</strong><small>Follaje de eucalipto</small></span><span class="addon-price">+$9</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="butterflies" aria-pressed="false"><span class="addon-art gold-art" aria-hidden="true">❀</span><span class="addon-copy"><strong>Butterfly accents</strong><small>Mariposas decorativas</small></span><span class="addon-price">+$7</span><span class="check-round">✓</span></button>
+    </div>
+   </fieldset>
+   <fieldset class="editor-group">
+    <legend><span class="step-number">03</span> Wrapping paper <small>Papel de ramo</small></legend>
+    <div class="wrap-grid" id="wrapOptions" role="group" aria-label="Bouquet wrapping">
+      <button type="button" data-wrap="kraft" class="wrap-choice active" aria-pressed="true"><span class="wrap-color" style="--paper:#bd9a75"></span><strong>Kraft</strong><small>Included</small></button>
+      <button type="button" data-wrap="cream" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#eee3cc"></span><strong>Ivory</strong><small>+$6</small></button>
+      <button type="button" data-wrap="blush" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#dcabb1"></span><strong>Blush</strong><small>+$6</small></button>
+      <button type="button" data-wrap="burgundy" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#814958"></span><strong>Wine</strong><small>+$8</small></button>
+    </div>
+   </fieldset>
+   <fieldset class="editor-group last-group">
+    <legend><span class="step-number">04</span> The little extras <small>Últimos detalles</small></legend>
+    <div class="addon-list">
+      <button type="button" class="addon-card" data-addon="crown" aria-pressed="false"><span class="addon-art gold-art" aria-hidden="true">♕</span><span class="addon-copy"><strong>Golden crown</strong><small>Corona dorada</small></span><span class="addon-price">+$18</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="ribbon" aria-pressed="false"><span class="addon-art ribbon-art" aria-hidden="true">⋈</span><span class="addon-copy"><strong>Satin ribbon</strong><small>Listón satinado</small></span><span class="addon-price">+$5</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="card" aria-pressed="false"><span class="addon-art" aria-hidden="true">✉</span><span class="addon-copy"><strong>Gift message card</strong><small>Tarjetita de regalo</small></span><span class="addon-price">+$5</span><span class="check-round">✓</span></button>
+    </div>
+   </fieldset>
+  </section>
+  <section class="visual-panel" aria-labelledby="previewTitle">
+    <div class="visual-bar"><span class="live-indicator"><span></span> LIVE PREVIEW</span><div class="visual-actions"><button type="button" id="surpriseButton" title="Try a surprise combination">✧ Surprise me</button><button type="button" id="resetButton">↺ Reset</button></div></div>
+    <div class="bouquet-canvas"><div class="canvas-corners top-left"></div><div class="canvas-corners top-right"></div><span class="canvas-arch" aria-hidden="true"></span><svg id="bouquetArt" viewBox="0 0 600 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="svgTitle svgDesc"><title id="svgTitle">Your custom bouquet visual preview</title><desc id="svgDesc">Roses, wrapping paper and selected accessories update as you build your bouquet.</desc></svg><div class="canvas-caption"><span>YOUR ONE-OF-A-KIND ARRANGEMENT</span><strong id="bouquetNickname">The Florentina Classic</strong></div><div class="preview-note">Illustrated preview · Actual flowers may vary / Vista ilustrativa</div></div>
+    <div class="visual-bottom"><span class="floating-flower" aria-hidden="true">✿</span><span>Made with intention. Designed by you.</span><span class="floating-flower" aria-hidden="true">✿</span></div>
+  </section>
+  <aside class="summary-panel" aria-labelledby="summaryTitle">
+   <p class="eyebrow">02 / YOUR CREATION</p><h2 id="summaryTitle">Your bouquet,<br><em>your story.</em></h2><div class="price-panel"><div><span>Estimated total</span><small>Precio estimado · USD</small></div><output id="totalPrice" aria-live="polite">$60.00</output></div>
+   <div class="summary-items"><div class="summary-caption"><strong>Your selections</strong><span>DETAILS</span></div><div id="priceBreakdown"></div></div>
+   <div class="occasion-group"><label for="occasion">What's the occasion? <small>¿Cuál es la ocasión?</small></label><select id="occasion"><option value="Just because">Just because / Porque sí</option><option value="Birthday">Birthday / Cumpleaños</option><option value="Anniversary">Anniversary / Aniversario</option><option value="Graduation">Graduation / Graduación</option><option value="Thanksgiving">Thanksgiving / Acción de Gracias</option><option value="Other">Other / Otra ocasión</option></select><label for="personalNote">A note for the florist <small>Detalles especiales (optional)</small></label><textarea id="personalNote" maxlength="400" rows="3" placeholder="Colors, pickup date, special requests…"></textarea></div>
+   <div class="summary-actions"><button type="button" id="pdfButton" class="primary-action"><span>↓</span> Download your bouquet PDF</button><button type="button" id="emailButton" class="outline-action">✉ Prepare email to florist</button><button type="button" id="whatsappButton" class="outline-action">◉ Prepare WhatsApp message</button></div>
+   <p class="disclaimer"><strong>Prototype / Prueba:</strong> Prices are illustrative estimates, not a quote. Availability, taxes and final pricing require confirmation. PDF is generated on your device. Email/WhatsApp open drafts only—nothing is automatically sent.</p>
+   <p id="actionStatus" role="status" aria-live="polite" class="action-status"></p>
+  </aside>
+ </div>
+ <section class="how-section"><span class="how-flower" aria-hidden="true">✿</span><div><p class="eyebrow">A LITTLE NOTE FROM THE STUDIO</p><h2>Something beautiful begins with an idea.</h2><p>Enjoy experimenting with your own arrangement. When you love it, download your design or share a draft with the florist. We’ll confirm availability and a final quote before any order is placed.</p><p class="how-spanish">Disfruta diseñando tu propio arreglo. Cuando te guste, guarda el diseño o comparte un mensaje. Confirmaremos los detalles y el precio final antes de hacer el pedido.</p></div></section>
+</main>
+<footer><div class="footer-inner"><a href="/" class="footer-brand">✿ Florería Florentina</a><span>Made with flowers & a little imagination.</span><span>3303 Chamblee Dunwoody Rd. · Chamblee, GA</span></div></footer>
+</body></html>
