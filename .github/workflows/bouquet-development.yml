@@ -1,0 +1,43 @@
+name: Bouquet Atelier development QA
+on:
+  push:
+    branches: [development]
+  workflow_dispatch:
+
+jobs:
+  bouquet-browser-test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install app dependencies and Chromium test runner
+        run: |
+          npm ci
+          npm install --no-save playwright@1.56.1
+      - name: Boot local development web server
+        run: |
+          npm start > /tmp/florentina-bouquet.log 2>&1 &
+          for i in $(seq 1 35); do
+            if curl -fsS http://127.0.0.1:3000/bouquet-builder.html > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/florentina-bouquet.log
+          exit 1
+      - name: Browser smoke tests — bouquet preview and actual PDF
+        run: node tests/bouquet-builder-browser.cjs
+      - name: Upload visual screenshots and sample PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bouquet-atelier-development-previews
+          path: artifacts/*
+          if-no-files-found: ignore
+      - name: Print server logs if failed
+        if: failure()
+        run: cat /tmp/florentina-bouquet.log || true
