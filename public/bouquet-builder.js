@@ -216,21 +216,88 @@
       '<ellipse cx="-36" cy="1" rx="22" ry="4" fill="'+highlight+'" opacity=".34"/>'+
       '<ellipse cx="37" cy="2" rx="21" ry="4" fill="'+highlight+'" opacity=".34"/></g>';
   }
+  function seeded(i){const n=Math.sin(i*127.1+6.82)*43758.5453;return n-Math.floor(n);}
+  function bouquetPositions(count){
+    if(count<=6)return positions.slice(0,count);
+    const spread=Math.min(1,Math.log2(count/6)/Math.log2(200/6));
+    const rx=105+108*spread, ry=85+78*spread;
+    const result=[];
+    for(let i=0;i<count;i++){
+      const angle=i*2.399963229728653+.38;
+      const radius=Math.sqrt((i+.65)/(count+.2));
+      const x=300+Math.cos(angle)*rx*radius+(seeded(i*3)-.5)*13;
+      const y=231+Math.sin(angle)*ry*radius+(seeded(i*3+1)-.5)*11;
+      const scale=(count<=12?.82:count<=24?.70:count<=50?.55:count<=100?.47:.37)*(.88+seeded(i+43)*.23);
+      result.push([Math.round(x),Math.round(y),scale]);
+    }
+    return result;
+  }
+  function rosePhotoColor(i){
+    if(state.roseColor!=='mixed')return state.roseColor;
+    return ['rose','blush','ivory','yellow','lavender','sunset'][Math.floor(seeded(i*5.7)*6)];
+  }
+  function floralPhotoDefs(){
+    let result='';
+    PHOTO_NAMES.forEach(name=>{
+      const data=photoData[name];
+      if(data)result+='<image id="rosePhoto-'+name+'" href="'+data+'" width="104" height="104" x="-52" y="-52" preserveAspectRatio="xMidYMid meet"/>';
+    });
+    return result;
+  }
+  function photoRoseSVG(x,y,s,index,color){
+    const photoName=ROSES[color].photo;
+    if(!photoData[photoName])return roseSVG(x,y,s,index,color);
+    const angle=Math.round((seeded(index*31+2)-.5)*35);
+    return '<g class="photo-rose" data-flower-color="'+color+'" transform="translate('+x+' '+y+') rotate('+angle+') scale('+(s*1.15)+')" filter="url(#roseShadow)"><use href="#rosePhoto-'+photoName+'"/></g>';
+  }
+  function extraFloralSVG(){
+    let out='';
+    const accents=[
+      {id:'sunflowers',x:128,y:175,c:'#dd9a30'},
+      {id:'lilies',x:467,y:160,c:'#fff1cf'},
+      {id:'chrysanthemums',x:458,y:334,c:'#cc87a6'}
+    ];
+    for(const item of accents){
+      if(!state.addons[item.id])continue;
+      out+='<g transform="translate('+item.x+' '+item.y+')" filter="url(#roseShadow)">';
+      for(let i=0;i<14;i++)out+='<ellipse cx="0" cy="-19" rx="9" ry="22" transform="rotate('+(i*360/14)+')" fill="'+item.c+'" stroke="'+shade(item.c,-.12)+'" stroke-width="1.2"/>';
+      out+='<circle r="12" fill="'+(item.id==='sunflowers'?'#705032':'#e5bb65')+'"/><circle r="5" fill="#9c754a"/></g>';
+    }
+    if(state.addons.pearls){for(let i=0;i<12;i++){const angle=i*2.4,r=90+seeded(i+70)*100;out+='<circle cx="'+(300+Math.cos(angle)*r)+'" cy="'+(250+Math.sin(angle)*r*.72)+'" r="7" fill="#fffdf5" stroke="#cdbbaa" stroke-width="1.8" filter="url(#roseShadow)"/>';}}
+    if(state.addons.money)out+='<g transform="translate(148 400) rotate(-18)"><rect width="108" height="47" rx="4" fill="#aec2a1" stroke="#5e795b" stroke-width="2"/><rect x="7" y="7" width="94" height="33" rx="4" fill="none" stroke="#668b60" stroke-width="2"/><text x="54" y="30" font-size="24" font-weight="bold" fill="#61845e" text-anchor="middle">$</text></g>';
+    if(state.addons.plush)out+='<g transform="translate(445 420)"><circle r="28" fill="#c9ac91"/><circle cx="-18" cy="-23" r="12" fill="#c9ac91"/><circle cx="18" cy="-23" r="12" fill="#c9ac91"/><ellipse cy="10" rx="14" ry="10" fill="#e5cfb2"/><circle cx="-8" cy="0" r="3" fill="#4f3b31"/><circle cx="8" cy="0" r="3" fill="#4f3b31"/><circle cy="9" r="4" fill="#4f3b31"/></g>';
+    return out;
+  }
   function bouquetSVG(){
-    const roses=positions.slice(0,state.roses);
+    const roses=bouquetPositions(state.roses);
     const shadow='<defs>'+
-      '<filter id="roseShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="3.4" flood-color="#6e4651" flood-opacity=".17"/></filter>'+
+      '<filter id="roseShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="2.7" flood-color="#49352f" flood-opacity=".24"/></filter>'+
       '<filter id="wrapShadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#6e4651" flood-opacity=".19"/></filter>'+
-      '</defs>';
-    let svg=shadow+'<g opacity=".4"><ellipse cx="300" cy="592" rx="124" ry="24" fill="#a58677" opacity=".18"/></g>';
+      floralPhotoDefs()+'</defs>';
+    let svg=shadow+'<g opacity=".35"><ellipse cx="300" cy="592" rx="124" ry="24" fill="#a58677" opacity=".18"/></g>';
     svg+='<g id="bouquet-stems">'+greenerySVG()+eucalyptusSVG()+babysBreathSVG()+'</g>';
     svg+='<g id="bouquet-wrap">'+wrapperSVG()+'</g>';
-    // Rows render back-to-front, with lower flowers above the wrapper's top edge.
     const sorted=roses.map(([x,y,s],i)=>({x,y,s,i})).sort((a,b)=>a.y-b.y);
-    sorted.forEach(p=>svg+=roseSVG(p.x,p.y,p.s,p.i));
-    svg+='<g id="bouquet-accessories">'+accessorySVG()+ribbonSVG()+'</g>';
-    svg+='<g opacity=".45"><circle cx="118" cy="166" r="3" fill="#c99da5"/><circle cx="489" cy="131" r="2.3" fill="#caab86"/><path d="M94 202l5-7 5 7-5 7Z" fill="#d1b19a"/><path d="M506 361l5-7 5 7-5 7Z" fill="#bfa49a"/></g>';
+    sorted.forEach(p=>svg+=photoRoseSVG(p.x,p.y,p.s,p.i,rosePhotoColor(p.i)));
+    svg+='<g id="bouquet-accessories">'+extraFloralSVG()+accessorySVG()+ribbonSVG()+'</g>';
     return svg;
+  }
+  async function loadPhotoAssets(){
+    const result=await Promise.all(PHOTO_NAMES.map(async name=>{
+      try{
+        const response=await fetch('/assets/bouquet/rose-'+name+'.webp',{cache:'force-cache'});
+        if(!response.ok)throw Error('HTTP '+response.status);
+        const bytes=new Uint8Array(await response.arrayBuffer());
+        let binary='';
+        for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+        return [name,'data:image/webp;base64,'+btoa(binary)];
+      }catch(error){console.warn('Photo asset failed; fallback drawing used',name,error);return [name,''];}
+    }));
+    result.forEach(([name,uri])=>{photoData[name]=uri;});
+    const ready=result.filter(([,uri])=>!!uri).length===PHOTO_NAMES.length;
+    $('bouquetArt').dataset.photoReady=String(ready);
+    updateArtwork();
+    return ready;
   }
   function updateArtwork(){
     const svg=$('bouquetArt');
@@ -347,6 +414,7 @@
     ctx.strokeStyle='#d5bbab';ctx.strokeRect(30,130,331,460);
     ctx.fillStyle='#f7eee6';ctx.fillRect(31,131,329,458);
     // Paint the same vector preview into the PDF at print resolution.
+    await photosReady;
     const svg=$('bouquetArt');
     const source=new XMLSerializer().serializeToString(svg);
     const objectUrl=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));
@@ -416,4 +484,5 @@
     }finally{button.disabled=false;}
   });
   update();
+  photosReady=loadPhotoAssets();
 })();
