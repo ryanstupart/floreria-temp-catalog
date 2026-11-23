@@ -206,15 +206,21 @@
     return result;
   }
   function ribbonSVG(){
-    const color=state.addons.ribbon?'#b96982':'#97765c';
-    const highlight=state.addons.ribbon?'#e7a6b6':'#c5ad96';
-    return '<g transform="translate(306 490)" filter="url(#wrapShadow)">'+
+    const color=state.addons.ribbon?RIBBON_COLORS[state.ribbonColor]:'#97765c';
+    const highlight=state.addons.ribbon?shade(color,.24):'#c5ad96';
+    const bow='<g transform="translate(306 490)" filter="url(#wrapShadow)">'+
       '<path d="M-4 3Q-38-25-70-15Q-78 17-39 20L0 7Z" fill="'+color+'" stroke="'+shade(color,-.12)+'" stroke-width="2"/>'+
       '<path d="M5 4Q41-26 70-15Q76 18 36 21L0 7Z" fill="'+color+'" stroke="'+shade(color,-.12)+'" stroke-width="2"/>'+
       '<path d="M-17 12L-45 72L-10 57L4 18" fill="'+color+'"/><path d="M19 12L53 69L17 59L3 18" fill="'+color+'"/>'+
       '<ellipse rx="17" ry="12" fill="'+highlight+'" stroke="'+shade(color,-.18)+'" stroke-width="2"/>'+
       '<ellipse cx="-36" cy="1" rx="22" ry="4" fill="'+highlight+'" opacity=".34"/>'+
       '<ellipse cx="37" cy="2" rx="21" ry="4" fill="'+highlight+'" opacity=".34"/></g>';
+    if(!state.addons.ribbon||!state.ribbonText)return bow;
+    const size=state.ribbonText.length>24?12:state.ribbonText.length>16?15:19;
+    return bow+'<g transform="translate(302 447) rotate(-5)" filter="url(#wrapShadow)">'+
+      '<rect x="-155" y="-19" width="310" height="40" rx="5" fill="'+color+'" stroke="'+highlight+'" stroke-width="2.1"/>'+
+      '<path d="M-149 -9H149" stroke="'+highlight+'" opacity=".6" stroke-width="1.7"/>'+
+      '<text class="ribbon-lettering" x="0" y="9" font-family="Georgia,serif" font-weight="bold" font-size="'+size+'" text-anchor="middle" fill="'+(state.ribbonColor==='ivory'?'#603745':'#fff6df')+'">'+safe(state.ribbonText)+'</text></g>';
   }
   function seeded(i){const n=Math.sin(i*127.1+6.82)*43758.5453;return n-Math.floor(n);}
   function bouquetPositions(count){
@@ -312,17 +318,32 @@
   }
   function update(){updateControls();renderPricing();updateArtwork();$('actionStatus').textContent='';}
   $('roseMinus').addEventListener('click',()=>{if(state.roses>6){state.roses--;update();}});
-  $('rosePlus').addEventListener('click',()=>{if(state.roses<20){state.roses++;update();}});
+  $('rosePlus').addEventListener('click',()=>{if(state.roses<200){state.roses++;update();}});
+  $('roseCountInput').addEventListener('change',event=>{
+    const requested=Number(event.target.value);
+    state.roses=Number.isFinite(requested)?Math.max(6,Math.min(200,Math.round(requested))):6;
+    update();
+  });
+  document.querySelectorAll('[data-count]').forEach(button=>button.addEventListener('click',()=>{
+    state.roses=Math.max(6,Math.min(200,Number(button.dataset.count)||6));
+    update();
+  }));
   document.querySelectorAll('[data-rose]').forEach(btn=>btn.addEventListener('click',()=>{state.roseColor=btn.dataset.rose;update();}));
   document.querySelectorAll('[data-wrap]').forEach(btn=>btn.addEventListener('click',()=>{state.wrap=btn.dataset.wrap;update();}));
   document.querySelectorAll('[data-addon]').forEach(btn=>btn.addEventListener('click',()=>{state.addons[btn.dataset.addon]=!state.addons[btn.dataset.addon];update();}));
+  $('ribbonText').addEventListener('input',event=>{
+    state.ribbonText=event.target.value.slice(0,30);
+    updateControls();renderPricing();updateArtwork();
+  });
+  $('ribbonColor').addEventListener('change',event=>{state.ribbonColor=event.target.value;update();});
   $('resetButton').addEventListener('click',()=>{state=cloneInitial();$('occasion').value='Just because';$('personalNote').value='';update();$('actionStatus').textContent='Bouquet reset / Ramo reiniciado.';});
   $('surpriseButton').addEventListener('click',()=>{
     const colors=Object.keys(ROSES),wraps=Object.keys(WRAPS);
-    state.roses=6+Math.floor(Math.random()*8);
+    state.roses=6+Math.floor(Math.random()*195);
     state.roseColor=colors[Math.floor(Math.random()*colors.length)];
     state.wrap=wraps[Math.floor(Math.random()*wraps.length)];
-    addOnOrder.forEach((id,index)=>{state.addons[id]=Math.random()<(index===0?.7:.28);});
+    addOnOrder.forEach((id,index)=>{state.addons[id]=Math.random()<(index===0?.7:.20);});
+    state.ribbonText='';state.ribbonColor='wine';
     update();
     $('actionStatus').textContent='A fresh combination, made for you / ¡Una nueva combinación!';
   });
@@ -337,6 +358,7 @@
       'Base bouquet: 6 roses + standard greenery + kraft wrap - '+money(PRICE.base),
       'Roses: '+state.roses+' stems ('+ROSES[state.roseColor].name+')',
       'Wrapping: '+WRAPS[state.wrap].name,
+      ...(state.addons.ribbon?['Ribbon color: '+state.ribbonColor,'Ribbon wording: '+(state.ribbonText||'(blank)')]:[]),
       ...quote.extras.map(item=>item.label+': +'+money(item.amount)),
       '',
       'ESTIMATED TOTAL: '+money(quote.total),
@@ -450,11 +472,11 @@
     ctx.strokeStyle='#d5b6b0';ctx.beginPath();ctx.moveTo(34,639);ctx.lineTo(575,639);ctx.stroke();
     ctx.fillStyle='#5f4c4c';ctx.font='10px Arial';
     const itemLabels=['Base bouquet  '+money(PRICE.base),...quote.extras.map(item=>item.label+'  +'+money(item.amount))];
-    // Two columns fit every possible accessory (up to nine rows) on one page.
+    // Two-column itemization fits the expanded sample accessory list.
     itemLabels.forEach((str,i)=>{
-      const column=i<5?0:1;
-      const row=i<5?i:i-5;
-      ctx.fillText(str,column?314:34,656+row*15);
+      const column=i<7?0:1;
+      const row=i<7?i:i-7;
+      ctx.fillText(str.length>42?str.slice(0,41)+'…':str,column?314:34,648+row*12);
     });
     ctx.fillStyle='#8d7372';ctx.font='9px Arial';
     ctx.fillText('DEVELOPMENT CONCEPT · NOT A CONFIRMED ORDER',34,738);
