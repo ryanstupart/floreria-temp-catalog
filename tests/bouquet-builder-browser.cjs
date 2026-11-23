@@ -42,6 +42,16 @@ const {chromium}=require('playwright');
   assert.equal(pdf.subarray(0,8).toString('ascii'),'%PDF-1.4');
   assert.ok(pdf.length>20000,'Generated PDF should have illustration and summary');
   assert.match(await page.locator('#actionStatus').innerText(),/PDF ready/);
+  // Maximum-option pricing validates caps and PDF layout with every accessory.
+  for(let i=0;i<13;i++) await page.locator('#rosePlus').click();
+  assert.equal((await page.locator('#roseCount').innerText()).trim(),'20');
+  assert.equal(await page.locator('#rosePlus').isDisabled(),true);
+  for(const id of ['eucalyptus','butterflies','ribbon','card']) await page.locator('[data-addon="'+id+'"]').click();
+  assert.equal((await page.locator('#totalPrice').innerText()).trim(),'$194.00');
+  const [maxDownload]=await Promise.all([page.waitForEvent('download',{timeout:20000}),page.locator('#pdfButton').click()]);
+  const fullPdfPath=path.join(out,'Florentina-Maximum-Accessories-Demo.pdf');
+  await maxDownload.saveAs(fullPdfPath);
+  assert.ok(fs.statSync(fullPdfPath).size>25000);
   await page.locator('#resetButton').click();
   assert.equal((await page.locator('#totalPrice').innerText()).trim(),'$60.00');
   assert.equal((await page.locator('#roseCount').innerText()).trim(),'6');
