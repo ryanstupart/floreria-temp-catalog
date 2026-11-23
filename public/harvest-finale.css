@@ -137,3 +137,33 @@ footer p:last-child{font-size:13px;opacity:.85}
  .hero-copy .button .harvest-cta-mobile{display:inline}
  .hero-copy .button{max-width:100%;white-space:nowrap;font-size:13px;padding:14px 19px}
 }
+
+/* Development-only florist bouquet creator feature teaser */
+.site-header nav .atelier-nav-link{background:#784554;color:#fff7e7;padding:11px 15px;border:1px solid #ad7a76;border-radius:100px;box-shadow:0 5px 14px rgba(80,39,50,.13);transition:background .2s,transform .2s}
+.site-header nav .atelier-nav-link:hover{background:#995b6a;color:white;transform:translateY(-2px)}
+.atelier-home-teaser{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;max-width:1160px;margin:0 auto 98px;min-height:410px;background:linear-gradient(120deg,#fdf8f2,#f1e0dd);border:1px solid #d4afb5;border-radius:25px;box-shadow:0 25px 58px rgba(87,45,53,.12);overflow:hidden}
+.atelier-home-copy{padding:clamp(31px,5vw,70px);position:relative;z-index:1}
+.atelier-home-copy .eyebrow{color:#9d6470;letter-spacing:.17em}
+.atelier-home-copy h2{font-family:'Playfair Display',Georgia,serif;color:#653c48;font-size:clamp(39px,4.5vw,62px);line-height:1.09;font-weight:600;letter-spacing:-.045em;margin:0 0 23px}
+.atelier-home-copy h2 em{font-weight:500;color:#a86b76}
+.atelier-home-copy>p:not(.eyebrow){font-size:15px;line-height:1.8;color:#654a50;margin:11px 0}
+.atelier-home-copy .spanish{color:#936d75!important}
+.atelier-home-button{display:inline-flex;align-items:center;justify-content:center;gap:16px;text-decoration:none;background:#7d4b5a;color:white;padding:17px 23px;border-radius:9px;font-weight:800;font-size:13px;margin:23px 0 13px;transition:transform .2s,background .2s}
+.atelier-home-button:hover{transform:translateY(-3px);background:#965e6f}
+.atelier-home-copy>small{display:block;font-size:10px;color:#968388;line-height:1.5}
+.atelier-home-art{position:relative;align-self:stretch;min-height:380px;isolation:isolate;background:radial-gradient(ellipse at 50% 48%,#faf2ed 2%,#e6c9cb 70%,#dbaeb7)}
+.atelier-home-art::before{position:absolute;content:'';inset:17px;border:1px solid rgba(133,84,91,.22);border-radius:50% 50% 4px 4px/45% 45% 4px 4px}
+.atelier-home-art-orbit{position:absolute;width:250px;height:280px;border:1px solid rgba(129,84,95,.2);border-radius:50%;top:8%;left:50%;transform:translateX(-50%)}
+.atelier-home-art-flower{position:absolute;line-height:1;font-family:Georgia,serif;color:#be697c;text-shadow:1px 5px 2px #a9707c;filter:drop-shadow(0 5px 7px rgba(98,50,63,.19))}
+.atelier-home-art-flower.first{top:16%;left:31%;font-size:130px;color:#bc6376;transform:rotate(-12deg)}
+.atelier-home-art-flower.second{top:33%;left:13%;font-size:113px;color:#e9b4aa;transform:rotate(-22deg)}
+.atelier-home-art-flower.third{top:29%;right:17%;font-size:125px;color:#d38592;transform:rotate(13deg)}
+.atelier-home-art-flower.fourth{top:13%;right:19%;font-size:87px;color:#f0d4bf;transform:rotate(21deg)}
+.atelier-home-art-sprig{position:absolute;font-size:175px;line-height:1;color:#71896b;top:26%;z-index:-1}
+.atelier-home-art-sprig.one{left:2%;transform:rotate(-43deg)}.atelier-home-art-sprig.two{right:1%;transform:scaleX(-1) rotate(-40deg)}
+.atelier-home-art-bow{position:absolute;font-size:110px;line-height:1;color:#915368;bottom:13%;left:50%;transform:translateX(-50%);text-shadow:0 3px 4px rgba(75,37,43,.2)}
+.atelier-home-art-caption{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#795b62;font-size:10px;letter-spacing:.16em;font-weight:800}
+@media(max-width:960px){.atelier-home-teaser{margin-inline:20px;grid-template-columns:1fr .7fr}.atelier-home-copy{padding:30px}.atelier-home-art{min-height:335px}.atelier-home-art-flower.first{font-size:100px}.atelier-home-art-flower.second{font-size:90px}.atelier-home-art-flower.third{font-size:95px}.atelier-home-art-flower.fourth{font-size:76px}}
+@media(max-width:720px){.site-header nav .atelier-nav-link{display:inline-block;font-size:11px;padding:9px 11px}.atelier-home-teaser{grid-template-columns:1fr;margin:0 14px 65px}.atelier-home-art{min-height:280px;order:-1}.atelier-home-copy{padding:27px 25px 32px}.atelier-home-copy h2{font-size:clamp(38px,9vw,52px)}.atelier-home-art-flower.first{font-size:115px;left:34%;top:5%}.atelier-home-art-flower.second{font-size:90px;left:20%;top:25%}.atelier-home-art-flower.third{font-size:95px;right:24%;top:23%}.atelier-home-art-flower.fourth{font-size:72px;right:25%;top:6%}.atelier-home-art-bow{bottom:12%;font-size:90px}.atelier-home-art-sprig{top:15%;font-size:130px}}
+@media(max-width:520px){.site-header nav .atelier-nav-link{font-size:10px;line-height:1.2;padding:10px 11px}.atelier-home-copy .eyebrow{font-size:10px}.atelier-home-copy>p:not(.eyebrow){font-size:14px}.atelier-home-button{width:100%;font-size:12px;padding:15px 11px}.atelier-home-art-caption{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.atelier-home-button,.site-header nav .atelier-nav-link{transition:none}}
