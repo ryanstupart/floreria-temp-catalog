@@ -21,21 +21,37 @@
  <nav aria-label="Main navigation"><a href="/">← Back to the shop</a><a href="/#catalog">Catalog / Catálogo</a></nav></div>
 </header>
 <main id="builder" class="studio-shell">
- <div class="intro"><p class="kicker"><span class="kicker-stroke"></span> THE FLORAL ATELIER <span class="kicker-stroke"></span></p><h1>Make it <em>uniquely yours.</em></h1><p class="intro-sub">Every bouquet tells a story. Choose each detail and watch yours bloom.</p><p class="intro-es">Diseña tu ramo a tu gusto y mira cómo florece.</p></div>
+ <div class="intro"><p class="kicker"><span class="kicker-stroke"></span> THE FLORAL ATELIER <span class="kicker-stroke"></span></p><h1>Make it <em>uniquely yours.</em></h1><p class="intro-sub">Every bouquet tells a story. Choose each detail and watch a photographic composition of your bouquet come to life.</p><p class="intro-es">Diseña tu ramo a tu gusto y mira cómo florece.</p></div>
  <div class="studio-grid">
   <section class="editor-panel" aria-labelledby="editorTitle">
    <div class="editor-header"><div><p class="eyebrow">01 / MAKE IT YOURS</p><h2 id="editorTitle">The finishing touches</h2></div><span class="editor-icon" aria-hidden="true">✿</span></div>
    <div class="base-card"><span class="base-icon" aria-hidden="true">✦</span><div><strong>Your starting bouquet</strong><small>6 roses · standard greens · kraft wrap</small></div><strong class="base-cost">$60</strong></div>
    <fieldset class="editor-group">
     <legend><span class="step-number">01</span> Your roses <small>Elige tus rosas</small></legend>
-    <div class="rose-quantity"><div><strong>Rose stems</strong><small>6 included · +$5 each additional stem</small></div><div class="quantity-actions"><button type="button" id="roseMinus" aria-label="Remove rose">−</button><output id="roseCount" aria-live="polite">6</output><button type="button" id="rosePlus" aria-label="Add rose">+</button></div></div>
+    <div class="rose-quantity"><div><strong>Rose stems</strong><small>6 included · up to 200 · +$5 each extra stem</small></div><div class="quantity-actions"><button type="button" id="roseMinus" aria-label="Remove rose">−</button><output id="roseCount" aria-live="polite">6</output><button type="button" id="rosePlus" aria-label="Add rose">+</button></div></div>
+    <div class="rose-bulk-controls">
+      <label for="roseCountInput">Exact stem count / Cantidad exacta</label>
+      <input id="roseCountInput" type="number" min="6" max="200" step="1" value="6" inputmode="numeric" aria-label="Exact number of roses from 6 to 200"/>
+      <span>6–200</span>
+    </div>
+    <div class="rose-presets" aria-label="Popular bouquet sizes">
+      <span>QUICK SIZE / TAMAÑO:</span>
+      <button type="button" data-count="12">12</button><button type="button" data-count="24">24</button><button type="button" data-count="50">50</button><button type="button" data-count="100">100</button><button type="button" data-count="200">200</button>
+    </div>
     <p class="control-hint">Choose their color / Elige su color</p>
     <div class="option-row" id="roseColors" role="group" aria-label="Rose colors">
       <button type="button" class="swatch-option active" data-rose="rose" aria-pressed="true"><span class="swatch" style="--swatch:#bb4e62"></span><span>Ruby<small>Rojo</small></span></button>
       <button type="button" class="swatch-option" data-rose="blush" aria-pressed="false"><span class="swatch" style="--swatch:#e8a9a0"></span><span>Blush<small>Rosa</small></span></button>
       <button type="button" class="swatch-option" data-rose="ivory" aria-pressed="false"><span class="swatch" style="--swatch:#f3e8d0"></span><span>Ivory<small>Marfil</small></span></button>
       <button type="button" class="swatch-option" data-rose="sunset" aria-pressed="false"><span class="swatch" style="--swatch:#d7894f"></span><span>Sunset<small>Naranja</small></span></button>
+      <button type="button" class="swatch-option" data-rose="yellow" aria-pressed="false"><span class="swatch" style="--swatch:#e8b637"></span><span>Yellow<small>Amarillo</small></span></button>
+      <button type="button" class="swatch-option" data-rose="lavender" aria-pressed="false"><span class="swatch" style="--swatch:#9c70ae"></span><span>Lavender<small>Lavanda</small></span></button>
+      <button type="button" class="swatch-option" data-rose="fuchsia" aria-pressed="false"><span class="swatch" style="--swatch:#c9236b"></span><span>Fuchsia<small>Fucsia</small></span></button>
+      <button type="button" class="swatch-option" data-rose="blue" aria-pressed="false"><span class="swatch" style="--swatch:#79abc6"></span><span>Blue*<small>Azul</small></span></button>
+      <button type="button" class="swatch-option" data-rose="black" aria-pressed="false"><span class="swatch" style="--swatch:#381d2b"></span><span>Black*<small>Negro</small></span></button>
+      <button type="button" class="swatch-option" data-rose="mixed" aria-pressed="false"><span class="swatch swatch-mixed"></span><span>Mixed<small>Mixto</small></span></button>
     </div>
+    <p class="control-footnote">*Blue and black are specialty-color concepts; confirm availability or tinting with the florist.</p>
    </fieldset>
    <fieldset class="editor-group">
     <legend><span class="step-number">02</span> Fillers & greenery <small>Relleno y follaje</small></legend>
@@ -43,6 +59,9 @@
       <button type="button" class="addon-card" data-addon="baby" aria-pressed="false"><span class="addon-art" aria-hidden="true">✧</span><span class="addon-copy"><strong>Baby’s breath</strong><small>Nube de flores · Ramillete</small></span><span class="addon-price">+$12</span><span class="check-round">✓</span></button>
       <button type="button" class="addon-card" data-addon="eucalyptus" aria-pressed="false"><span class="addon-art sage-art" aria-hidden="true">❧</span><span class="addon-copy"><strong>Eucalyptus</strong><small>Follaje de eucalipto</small></span><span class="addon-price">+$9</span><span class="check-round">✓</span></button>
       <button type="button" class="addon-card" data-addon="butterflies" aria-pressed="false"><span class="addon-art gold-art" aria-hidden="true">❀</span><span class="addon-copy"><strong>Butterfly accents</strong><small>Mariposas decorativas</small></span><span class="addon-price">+$7</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="sunflowers" aria-pressed="false"><span class="addon-art gold-art" aria-hidden="true">🌻</span><span class="addon-copy"><strong>Sunflower accents</strong><small>Girasoles decorativos</small></span><span class="addon-price">+$20</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="lilies" aria-pressed="false"><span class="addon-art" aria-hidden="true">✾</span><span class="addon-copy"><strong>Lily accents</strong><small>Lirios · Concept sample</small></span><span class="addon-price">+$18</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="chrysanthemums" aria-pressed="false"><span class="addon-art" aria-hidden="true">✿</span><span class="addon-copy"><strong>Chrysanthemums</strong><small>Crisantemos · Concept sample</small></span><span class="addon-price">+$15</span><span class="check-round">✓</span></button>
     </div>
    </fieldset>
    <fieldset class="editor-group">
@@ -52,6 +71,10 @@
       <button type="button" data-wrap="cream" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#eee3cc"></span><strong>Ivory</strong><small>+$6</small></button>
       <button type="button" data-wrap="blush" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#dcabb1"></span><strong>Blush</strong><small>+$6</small></button>
       <button type="button" data-wrap="burgundy" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#814958"></span><strong>Wine</strong><small>+$8</small></button>
+      <button type="button" data-wrap="black" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#222329"></span><strong>Black</strong><small>+$8</small></button>
+      <button type="button" data-wrap="gold" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#c9a45d"></span><strong>Gold</strong><small>+$10</small></button>
+      <button type="button" data-wrap="lilac" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#b69ac6"></span><strong>Lilac</strong><small>+$6</small></button>
+      <button type="button" data-wrap="frosted" class="wrap-choice" aria-pressed="false"><span class="wrap-color" style="--paper:#dce6e7"></span><strong>Frosted</strong><small>+$7</small></button>
     </div>
    </fieldset>
    <fieldset class="editor-group last-group">
@@ -60,12 +83,22 @@
       <button type="button" class="addon-card" data-addon="crown" aria-pressed="false"><span class="addon-art gold-art" aria-hidden="true">♕</span><span class="addon-copy"><strong>Golden crown</strong><small>Corona dorada</small></span><span class="addon-price">+$18</span><span class="check-round">✓</span></button>
       <button type="button" class="addon-card" data-addon="ribbon" aria-pressed="false"><span class="addon-art ribbon-art" aria-hidden="true">⋈</span><span class="addon-copy"><strong>Satin ribbon</strong><small>Listón satinado</small></span><span class="addon-price">+$5</span><span class="check-round">✓</span></button>
       <button type="button" class="addon-card" data-addon="card" aria-pressed="false"><span class="addon-art" aria-hidden="true">✉</span><span class="addon-copy"><strong>Gift message card</strong><small>Tarjetita de regalo</small></span><span class="addon-price">+$5</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="pearls" aria-pressed="false"><span class="addon-art" aria-hidden="true">◌</span><span class="addon-copy"><strong>Pearl accents</strong><small>Perlas decorativas</small></span><span class="addon-price">+$10</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="money" aria-pressed="false"><span class="addon-art sage-art" aria-hidden="true">＄</span><span class="addon-copy"><strong>Money-style accents</strong><small>Decoración estilo billetes · no cash included</small></span><span class="addon-price">+$25</span><span class="check-round">✓</span></button>
+      <button type="button" class="addon-card" data-addon="plush" aria-pressed="false"><span class="addon-art" aria-hidden="true">♡</span><span class="addon-copy"><strong>Mini plush accent</strong><small>Peluchito · concepto</small></span><span class="addon-price">+$20</span><span class="check-round">✓</span></button>
+    </div>
+    <div class="ribbon-personalization" id="ribbonCustomization">
+      <label for="ribbonText">Personalize your satin ribbon <small>Texto para el listón</small></label>
+      <div class="ribbon-input-line"><input id="ribbonText" type="text" maxlength="30" value="" placeholder="e.g. Te Amo ♡ / Happy Birthday" disabled /><output id="ribbonTextCount" aria-live="polite">0 / 30</output></div>
+      <label for="ribbonColor">Ribbon color / Color del listón</label>
+      <select id="ribbonColor" disabled><option value="wine">Burgundy / Vino</option><option value="blush">Blush pink / Rosa</option><option value="ivory">Ivory / Marfil</option><option value="black">Black / Negro</option><option value="gold">Gold / Dorado</option></select>
+      <small class="ribbon-tip">Select “Satin ribbon” above to add your text. Maximum 30 characters.</small>
     </div>
    </fieldset>
   </section>
   <section class="visual-panel" aria-labelledby="previewTitle">
-    <div class="visual-bar"><span class="live-indicator"><span></span> LIVE PREVIEW</span><div class="visual-actions"><button type="button" id="surpriseButton" title="Try a surprise combination">✧ Surprise me</button><button type="button" id="resetButton">↺ Reset</button></div></div>
-    <div class="bouquet-canvas"><div class="canvas-corners top-left"></div><div class="canvas-corners top-right"></div><span class="canvas-arch" aria-hidden="true"></span><svg id="bouquetArt" viewBox="0 0 600 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="svgTitle svgDesc"><title id="svgTitle">Your custom bouquet visual preview</title><desc id="svgDesc">Roses, wrapping paper and selected accessories update as you build your bouquet.</desc></svg><div class="canvas-caption"><span>YOUR ONE-OF-A-KIND ARRANGEMENT</span><strong id="bouquetNickname">The Florentina Classic</strong></div><div class="preview-note">Illustrated preview · Actual flowers may vary / Vista ilustrativa</div></div>
+    <div class="visual-bar"><span class="live-indicator"><span></span> PHOTO-COMPOSITE PREVIEW</span><div class="visual-actions"><button type="button" id="surpriseButton" title="Try a surprise combination">✧ Surprise me</button><button type="button" id="resetButton">↺ Reset</button></div></div>
+    <div class="bouquet-canvas"><div class="canvas-corners top-left"></div><div class="canvas-corners top-right"></div><span class="canvas-arch" aria-hidden="true"></span><svg id="bouquetArt" viewBox="0 0 600 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="svgTitle svgDesc"><title id="svgTitle">Your custom bouquet visual preview</title><desc id="svgDesc">Roses, wrapping paper and selected accessories update as you build your bouquet.</desc></svg><div class="canvas-caption"><span>YOUR ONE-OF-A-KIND ARRANGEMENT</span><strong id="bouquetNickname">The Florentina Classic</strong></div><div class="preview-note">Photo-composited concept · Arrangement, materials and exact appearance may vary / Vista compuesta de fotografías</div></div>
     <div class="visual-bottom"><span class="floating-flower" aria-hidden="true">✿</span><span>Made with intention. Designed by you.</span><span class="floating-flower" aria-hidden="true">✿</span></div>
   </section>
   <aside class="summary-panel" aria-labelledby="summaryTitle">
