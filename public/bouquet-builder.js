@@ -366,8 +366,12 @@
     ctx.strokeStyle='#d5b6b0';ctx.beginPath();ctx.moveTo(34,639);ctx.lineTo(575,639);ctx.stroke();
     ctx.fillStyle='#5f4c4c';ctx.font='10px Arial';
     const itemLabels=['Base bouquet  '+money(PRICE.base),...quote.extras.map(item=>item.label+'  +'+money(item.amount))];
-    let iy=656;
-    for(const str of itemLabels.slice(0,4)){ctx.fillText(str,34,iy);iy+=15;}
+    // Two columns fit every possible accessory (up to nine rows) on one page.
+    itemLabels.forEach((str,i)=>{
+      const column=i<5?0:1;
+      const row=i<5?i:i-5;
+      ctx.fillText(str,column?314:34,656+row*15);
+    });
     ctx.fillStyle='#8d7372';ctx.font='9px Arial';
     ctx.fillText('DEVELOPMENT CONCEPT · NOT A CONFIRMED ORDER',34,738);
     ctx.fillText('Final price, availability and taxes must be confirmed by the florist.',34,754);
