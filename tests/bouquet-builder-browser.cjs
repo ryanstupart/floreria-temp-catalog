@@ -56,7 +56,7 @@ const {chromium}=require('playwright');
   assert.equal((await page.locator('#totalPrice').innerText()).trim(),'$1,202.00');
   await page.locator('#ribbonText').fill('Para Mi Amor 2026');
   assert.equal(await page.locator('#ribbonTextCount').innerText(),'17 / 30');
-  assert.ok((await page.locator('#bouquetArt .ribbon-lettering').innerText()).includes('Para Mi Amor'));
+  assert.ok((await page.locator('#bouquetArt .ribbon-lettering').textContent()).includes('Para Mi Amor'));
   await page.locator('#ribbonColor').selectOption('gold');
   await page.screenshot({path:path.join(out,'bouquet-studio-200-roses.png'),animations:'disabled',fullPage:false});
   const [maxDownload]=await Promise.all([page.waitForEvent('download',{timeout:20000}),page.locator('#pdfButton').click()]);
