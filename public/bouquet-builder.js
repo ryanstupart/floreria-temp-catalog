@@ -3,37 +3,47 @@
 (() => {
   'use strict';
 
-  const PRICE = Object.freeze({
-    base: 60, rose: 5, baby: 12, eucalyptus: 9, butterflies: 7,
-    crown: 18, ribbon: 5, card: 5,
-    kraft: 0, cream: 6, blush: 6, burgundy: 8
+  const PRICE=Object.freeze({base:60,rose:5,baby:12,eucalyptus:9,butterflies:7,sunflowers:20,lilies:18,chrysanthemums:15,crown:18,ribbon:5,card:5,pearls:10,money:25,plush:20,kraft:0,cream:6,blush:6,burgundy:8,black:8,gold:10,lilac:6,frosted:7});
+  const WRAPS=Object.freeze({
+    kraft:{name:'Natural kraft',color:'#c3a17b',shade:'#a98461',light:'#e0c49f'},
+    cream:{name:'Ivory paper',color:'#eee4d2',shade:'#ccbaa6',light:'#fff8e9'},
+    blush:{name:'Blush paper',color:'#e3b3bc',shade:'#c98f9c',light:'#f4d7da'},
+    burgundy:{name:'Burgundy paper',color:'#865161',shade:'#603a4b',light:'#ad7383'},
+    black:{name:'Black luxury paper',color:'#28252c',shade:'#131418',light:'#5a525a'},
+    gold:{name:'Gold-trim paper',color:'#c9a75e',shade:'#997339',light:'#eadaae'},
+    lilac:{name:'Lilac paper',color:'#b9a4c7',shade:'#8f779d',light:'#e0d1ea'},
+    frosted:{name:'Frosted paper',color:'#d5e3e5',shade:'#a4bec3',light:'#f5fcfc'}
   });
-  const WRAPS = Object.freeze({
-    kraft: { name:'Natural kraft', color:'#c3a17b', shade:'#a98461', light:'#e0c49f' },
-    cream: { name:'Ivory paper', color:'#eee4d2', shade:'#ccbaa6', light:'#fff8e9' },
-    blush: { name:'Blush paper', color:'#e3b3bc', shade:'#c98f9c', light:'#f4d7da' },
-    burgundy: { name:'Burgundy paper', color:'#865161', shade:'#603a4b', light:'#ad7383' }
+  const ROSES=Object.freeze({
+    rose:{name:'Ruby roses',photo:'ruby',outer:'#aa3d59',base:'#c94d6b',light:'#ec9ba9',dark:'#862f4b'},
+    blush:{name:'Blush roses',photo:'blush',outer:'#d99096',base:'#eeb7b1',light:'#ffe0d7',dark:'#b96f7d'},
+    ivory:{name:'Ivory roses',photo:'ivory',outer:'#d4bfa4',base:'#f3e6cf',light:'#fff8e8',dark:'#b99e8b'},
+    sunset:{name:'Sunset roses',photo:'sunset',outer:'#b85c3b',base:'#e18a54',light:'#f3b375',dark:'#a34638'},
+    yellow:{name:'Yellow roses',photo:'yellow',outer:'#c4a02c',base:'#e8b637',light:'#f9dd80',dark:'#9b7724'},
+    lavender:{name:'Lavender roses',photo:'lavender',outer:'#95679d',base:'#b28dc2',light:'#d7b8da',dark:'#72477e'},
+    fuchsia:{name:'Fuchsia roses',photo:'fuchsia',outer:'#b32b69',base:'#cc4383',light:'#e980aa',dark:'#8d2255'},
+    blue:{name:'Blue-tinted roses',photo:'blue',outer:'#628dae',base:'#a2c6d5',light:'#d0e4ef',dark:'#416d88'},
+    black:{name:'Black-tinted roses',photo:'black',outer:'#3f2637',base:'#4e293d',light:'#7b5263',dark:'#241824'},
+    mixed:{name:'Mixed-color roses',photo:'ruby',outer:'#aa3d59',base:'#c94d6b',light:'#ec9ba9',dark:'#862f4b'}
   });
-  const ROSES = Object.freeze({
-    rose:{name:'Ruby roses', outer:'#aa3d59', base:'#c94d6b', light:'#ec9ba9', dark:'#862f4b'},
-    blush:{name:'Blush roses', outer:'#d99096', base:'#eeb7b1', light:'#ffe0d7', dark:'#b96f7d'},
-    ivory:{name:'Ivory roses', outer:'#d4bfa4', base:'#f3e6cf', light:'#fff8e8', dark:'#b99e8b'},
-    sunset:{name:'Sunset roses', outer:'#b85c3b', base:'#e18a54', light:'#f3b375', dark:'#a34638'}
+  const ADDONS=Object.freeze({
+    baby:['Baby’s breath','Nube de flores'],eucalyptus:['Eucalyptus','Eucalipto'],
+    butterflies:['Butterfly accents','Mariposas'],sunflowers:['Sunflower accents','Girasoles'],
+    lilies:['Lily accents','Lirios'],chrysanthemums:['Chrysanthemums','Crisantemos'],
+    crown:['Golden crown','Corona'],ribbon:['Personalized satin ribbon','Listón personalizado'],
+    card:['Gift message card','Tarjeta'],pearls:['Pearl accents','Perlas'],
+    money:['Money-style decorations','No cash included'],plush:['Mini plush accent','Peluche']
   });
-  const ADDONS = Object.freeze({
-    baby: ['Baby’s breath','Baby’s breath / Nube de flores'],
-    eucalyptus: ['Eucalyptus','Eucalyptus / Eucalipto'],
-    butterflies: ['Butterfly accents','Butterfly accents / Mariposas'],
-    crown: ['Golden crown','Golden crown / Corona'],
-    ribbon: ['Satin ribbon','Satin ribbon / Listón'],
-    card: ['Gift message card','Gift card / Tarjeta']
-  });
-  const INITIAL = {roses:6, roseColor:'rose',wrap:'kraft',addons:{baby:false,eucalyptus:false,butterflies:false,crown:false,ribbon:false,card:false}};
+  const RIBBON_COLORS={wine:'#91495e',blush:'#d49bab',ivory:'#e9ddc9',black:'#28252c',gold:'#b99553'};
+  const PHOTO_NAMES=['ruby','blush','ivory','sunset','yellow','lavender','fuchsia','blue','black'];
+  const photoData={};
+  let photosReady=Promise.resolve();
+  const INITIAL = {roses:6,roseColor:'rose',wrap:'kraft',ribbonText:'',ribbonColor:'wine',addons:{baby:false,eucalyptus:false,butterflies:false,sunflowers:false,lilies:false,chrysanthemums:false,crown:false,ribbon:false,card:false,pearls:false,money:false,plush:false}};
   let state = cloneInitial();
   const $ = id => document.getElementById(id);
   const money = amount => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(amount);
   const safe = value => String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-  const addOnOrder=['baby','eucalyptus','butterflies','crown','ribbon','card'];
+  const addOnOrder=['baby','eucalyptus','butterflies','sunflowers','lilies','chrysanthemums','crown','ribbon','card','pearls','money','plush'];
   const positions = [
     [300,167,.93],[221,214,.97],[373,211,1.01],[169,271,.92],[300,279,1.05],[430,267,.94],
     [256,139,.8],[343,135,.79],[131,214,.87],[468,216,.84],[240,306,.97],[372,313,.98],
@@ -58,7 +68,13 @@
   function updateControls() {
     $('roseCount').textContent=String(state.roses);
     $('roseMinus').disabled=state.roses<=6;
-    $('rosePlus').disabled=state.roses>=20;
+    $('rosePlus').disabled=state.roses>=200;
+    $('roseCountInput').value=String(state.roses);
+    $('ribbonText').disabled=!state.addons.ribbon;
+    $('ribbonColor').disabled=!state.addons.ribbon;
+    $('ribbonText').value=state.ribbonText;
+    $('ribbonColor').value=state.ribbonColor;
+    $('ribbonTextCount').textContent=state.ribbonText.length+' / 30';
     setActive('[data-rose]','data-rose',state.roseColor);
     setActive('[data-wrap]','data-wrap',state.wrap);
     document.querySelectorAll('[data-addon]').forEach(el=>el.setAttribute('aria-pressed',String(state.addons[el.dataset.addon])));
@@ -78,7 +94,7 @@
     row('Signature base bouquet',PRICE.base,'6 roses · standard greenery · kraft paper','breakdown-base');
     quote.extras.forEach(item=>row(item.label,item.amount));
     row('Estimated total',quote.total,'Subject to florist confirmation','breakdown-subtotal');
-    const name=state.addons.crown?'The Royal Florentina':state.roses>=12?'The Grand Bouquet':state.addons.baby?'The Cloud of Roses':'The Florentina Classic';
+    const name=state.addons.crown?'The Royal Florentina':state.roses>=100?'The Florentina Grandeur':state.roses>=50?'The Luxe Rose Cloud':state.roses>=12?'The Grand Bouquet':state.addons.baby?'The Cloud of Roses':'The Florentina Classic';
     $('bouquetNickname').textContent=name;
     $('svgDesc').textContent=state.roses+' '+ROSES[state.roseColor].name+', '+WRAPS[state.wrap].name+
       (addOnOrder.filter(id=>state.addons[id]).length?' with '+addOnOrder.filter(id=>state.addons[id]).map(id=>ADDONS[id][0]).join(', '):'')+'.';
@@ -89,8 +105,8 @@
     const rgb=[0,2,4].map(i=>parseInt(base.slice(i,i+2),16));
     return '#'+rgb.map(n=>Math.round(Math.max(0,Math.min(255,amount>0?lerp(n,255,amount):lerp(n,0,-amount)))).toString(16).padStart(2,'0')).join('');
   }
-  function roseSVG(x,y,scale,index) {
-    const palette=ROSES[state.roseColor];
+  function roseSVG(x,y,scale,index,flowerColor=state.roseColor) {
+    const palette=ROSES[flowerColor];
     let outer='';
     for(let k=0;k<9;k++){
       const angle=360*k/9+index*13;
@@ -138,7 +154,7 @@
   }
   function greenerySVG(){
     let out='';
-    positions.slice(0,state.roses).forEach(([x,y],i)=>{
+    bouquetPositions(Math.min(state.roses,38)).forEach(([x,y],i)=>{
       const dx=(x-300)*.38;const branchAngle=((i%2)?-1:1);
       out+='<path d="M'+(x+4)+' '+(y+12)+' Q'+(x+dx)+' '+(y+160)+' 301 563" fill="none" stroke="'+(i%2?'#667960':'#728363')+'" stroke-width="5" stroke-linecap="round"/>';
       if(i<13){
